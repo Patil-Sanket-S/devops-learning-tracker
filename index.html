@@ -7,200 +7,246 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0f1117; --surface: #181c27; --surface2: #1e2333;
-    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
-    --text: #e8eaf0; --muted: #7a8099;
-    --accent: #4f9cf9; --accent2: #38d9a9; --accent3: #f59e0b; --accent4: #f472b6;
-    --danger: #f87171; --success: #34d399;
-    --mono: 'JetBrains Mono', monospace; --sans: 'DM Sans', sans-serif;
-    --radius: 8px; --radius-lg: 14px;
-  }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; min-height: 100vh; line-height: 1.6; }
-  .app { display: flex; min-height: 100vh; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1e2333;--surface3:#232840;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#e8eaf0;--muted:#7a8099;--muted2:#555c75;
+  --accent:#4f9cf9;--accent2:#38d9a9;--accent3:#f59e0b;--accent4:#f472b6;
+  --danger:#f87171;--success:#34d399;
+  --mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif;
+  --r:8px;--rl:14px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh;line-height:1.6}
+.app{display:flex;min-height:100vh}
 
-  .sidebar { width: 220px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; }
-  .logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-  .logo-tag { font-family: var(--mono); font-size: 10px; color: var(--accent2); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
-  .logo-name { font-size: 16px; font-weight: 600; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 500; transition: all 0.15s; border-left: 2px solid transparent; user-select: none; }
-  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(79,156,249,0.07); }
-  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
-  .streak-card { margin: auto 16px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
-  .streak-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .streak-num { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--accent3); }
-  .streak-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+/* SIDEBAR */
+.sidebar{width:220px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.logo-tag{font-family:var(--mono);font-size:10px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.logo-name{font-size:16px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:all 0.15s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(79,156,249,0.07)}
+.nav-icon{font-size:15px;width:20px;text-align:center}
+.streak-card{margin:auto 16px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+.streak-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.streak-num{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--accent3)}
+.streak-sub{font-size:11px;color:var(--muted);margin-top:2px}
 
-  .main { margin-left: 220px; flex: 1; padding: 32px; max-width: 960px; }
-  .page { display: none; }
-  .page.active { display: block; }
-  .page-header { margin-bottom: 28px; }
-  .page-title { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
-  .page-subtitle { font-size: 13px; color: var(--muted); }
+/* SYNC BAR */
+.sync-bar{display:flex;align-items:center;gap:8px;padding:7px 16px;background:var(--surface);border-bottom:1px solid var(--border);font-size:12px;color:var(--muted);position:sticky;top:0;z-index:50}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.sync-dot.synced{background:var(--success)}
+.sync-dot.syncing{background:var(--accent3);animation:pulse 1s infinite}
+.sync-dot.error{background:var(--danger)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; }
-  .card-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 16px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+/* MAIN */
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.page{display:none;flex:1}
+.page.active{display:flex;flex-direction:column}
+.page-inner{padding:28px 32px;flex:1}
+.page-header{margin-bottom:24px}
+.page-title{font-size:21px;font-weight:600;margin-bottom:3px}
+.page-subtitle{font-size:13px;color:var(--muted)}
 
-  .metric { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
-  .metric-val { font-family: var(--mono); font-size: 26px; font-weight: 700; }
-  .metric-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:16px}
+.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 
-  .bucket { margin-bottom: 20px; }
-  .bucket:last-child { margin-bottom: 0; }
-  .bucket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .bucket-name { font-size: 13px; font-weight: 500; }
-  .bucket-hrs { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-  .progress-track { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-  .bucket-add { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
-  .hrs-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; color: var(--text); font-family: var(--mono); font-size: 12px; width: 70px; outline: none; }
-  .hrs-input:focus { border-color: var(--accent); }
+/* METRICS */
+.metric{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center}
+.metric-val{font-family:var(--mono);font-size:26px;font-weight:700}
+.metric-label{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
 
-  .btn { background: transparent; border: 1px solid var(--border2); border-radius: 6px; padding: 6px 14px; color: var(--text); font-family: var(--sans); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-  .btn:hover { background: rgba(255,255,255,0.06); }
-  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn-primary:hover { background: #3d88e3; }
-  .btn-sm { padding: 4px 10px; font-size: 11px; }
-  .btn-danger { border-color: var(--danger); color: var(--danger); }
-  .btn-danger:hover { background: rgba(248,113,113,0.1); }
-  .btn-success { border-color: var(--success); color: var(--success); }
-  .btn-success:hover { background: rgba(52,211,153,0.1); }
+/* PROGRESS BUCKETS */
+.bucket{margin-bottom:18px}
+.bucket:last-child{margin-bottom:0}
+.bucket-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.bucket-name{font-size:13px;font-weight:500}
+.bucket-hrs{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.progress-track{height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.5s ease}
+.bucket-add{display:flex;gap:8px;margin-top:8px;align-items:center}
+.hrs-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text);font-family:var(--mono);font-size:12px;width:70px;outline:none}
+.hrs-input:focus{border-color:var(--accent)}
 
-  .form-group { margin-bottom: 16px; }
-  .form-label { font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: block; }
-  .form-input, .form-select, .form-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; color: var(--text); font-family: var(--sans); font-size: 13px; outline: none; transition: border-color 0.15s; }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
-  .form-textarea { resize: vertical; min-height: 80px; }
-  .form-select option { background: var(--surface2); }
+/* BUTTONS */
+.btn{background:transparent;border:1px solid var(--border2);border-radius:6px;padding:6px 14px;color:var(--text);font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:rgba(255,255,255,0.06)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:#3d88e3}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-danger{border-color:rgba(248,113,113,0.4);color:var(--danger)}
+.btn-danger:hover{background:rgba(248,113,113,0.08)}
+.btn-success{border-color:rgba(52,211,153,0.4);color:var(--success)}
+.btn-success:hover{background:rgba(52,211,153,0.08)}
+.btn-ghost{border-color:transparent;color:var(--muted)}
+.btn-ghost:hover{color:var(--text);background:rgba(255,255,255,0.04)}
 
-  .log-entry { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; display: flex; gap: 14px; align-items: flex-start; }
-  .log-date { font-family: var(--mono); font-size: 11px; color: var(--muted); min-width: 80px; padding-top: 2px; }
-  .log-content { flex: 1; }
-  .log-topic { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-  .log-meta { font-size: 12px; color: var(--muted); }
-  .log-notes { font-size: 12px; color: var(--muted); margin-top: 6px; font-style: italic; }
+/* FORMS */
+.form-group{margin-bottom:14px}
+.form-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;display:block}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px 13px;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;transition:border-color 0.15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
+.form-textarea{resize:vertical;min-height:90px;line-height:1.6;white-space:pre-wrap}
+.form-select option{background:var(--surface2)}
 
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-  .tag-core { background: rgba(79,156,249,0.15); color: var(--accent); }
-  .tag-build { background: rgba(56,217,169,0.15); color: var(--accent2); }
-  .tag-retention { background: rgba(245,158,11,0.15); color: var(--accent3); }
-  .tag-job { background: rgba(244,114,182,0.15); color: var(--accent4); }
-  .tag-trash { background: rgba(248,113,113,0.15); color: var(--danger); }
+/* TAGS */
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.tag-core{background:rgba(79,156,249,0.15);color:var(--accent)}
+.tag-build{background:rgba(56,217,169,0.15);color:var(--accent2)}
+.tag-retention{background:rgba(245,158,11,0.15);color:var(--accent3)}
+.tag-job{background:rgba(244,114,182,0.15);color:var(--accent4)}
+.tag-trash{background:rgba(248,113,113,0.15);color:var(--danger)}
 
-  .cheat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
-  .cheat-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-  .cheat-analogy { font-size: 12px; color: var(--accent2); margin-bottom: 8px; font-family: var(--mono); }
-  .cheat-field { margin-bottom: 10px; }
-  .cheat-field-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 3px; }
-  .cheat-field-val { font-size: 13px; }
-  .cheat-cmds { font-family: var(--mono); font-size: 11px; background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 6px; color: var(--accent2); margin-top: 4px; white-space: pre-wrap; }
+/* ── GMAIL-STYLE LOG LAYOUT ── */
+.log-layout{display:grid;grid-template-columns:340px 1fr;height:calc(100vh - 200px);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;background:var(--surface)}
+.log-list-panel{border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.log-search-bar{padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:5}
+.log-search-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;color:var(--text);font-size:12px;outline:none}
+.log-search-input:focus{border-color:var(--accent)}
+.log-list-item{padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s;display:flex;flex-direction:column;gap:4px;position:relative}
+.log-list-item:hover{background:var(--surface2)}
+.log-list-item.selected{background:rgba(79,156,249,0.08);border-left:2px solid var(--accent)}
+.log-list-item.deleted-item{opacity:0.5}
+.log-item-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.log-item-topic{font-size:13px;font-weight:500;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log-item-date{font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0}
+.log-item-meta{display:flex;gap:6px;align-items:center}
+.log-item-preview{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log-detail-panel{overflow-y:auto;display:flex;flex-direction:column}
+.log-detail-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);gap:12px}
+.log-detail-empty-icon{font-size:36px;opacity:0.3}
+.log-detail-content{padding:24px 28px;flex:1}
+.log-detail-header{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.log-detail-topic{font-size:18px;font-weight:600;margin-bottom:8px}
+.log-detail-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.log-detail-section{margin-bottom:18px}
+.log-detail-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px}
+.log-detail-value{font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.log-detail-actions{display:flex;gap:8px;padding:16px 28px;border-top:1px solid var(--border);background:var(--surface)}
+.conf-badge{padding:3px 10px;border-radius:4px;font-size:11px;font-weight:500}
+.conf-low{background:rgba(245,158,11,0.15);color:var(--accent3)}
+.conf-medium{background:rgba(79,156,249,0.15);color:var(--accent)}
+.conf-high{background:rgba(52,211,153,0.15);color:var(--success)}
 
-  .portfolio-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
-  .portfolio-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-  .portfolio-week { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 8px; }
-  .portfolio-desc { font-size: 13px; color: var(--muted); }
+/* CHEAT SHEETS */
+.cheat-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.cheat-title{font-size:15px;font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.cheat-analogy{font-size:12px;color:var(--accent2);margin-bottom:10px;font-family:var(--mono)}
+.cheat-field{margin-bottom:10px}
+.cheat-field-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
+.cheat-field-val{font-size:13px}
+.cheat-cmds{font-family:var(--mono);font-size:11px;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:6px;color:var(--accent2);margin-top:4px;white-space:pre-wrap}
 
-  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
-  .status-done { background: rgba(52,211,153,0.15); color: var(--success); }
-  .status-wip { background: rgba(245,158,11,0.15); color: var(--accent3); }
-  .status-planned { background: rgba(122,128,153,0.15); color: var(--muted); }
+/* PORTFOLIO */
+.portfolio-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.status-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
+.status-done{background:rgba(52,211,153,0.15);color:var(--success)}
+.status-wip{background:rgba(245,158,11,0.15);color:var(--accent3)}
+.status-planned{background:rgba(122,128,153,0.15);color:var(--muted)}
 
-  .milestone { display: flex; gap: 16px; margin-bottom: 20px; position: relative; }
-  .milestone::before { content: ''; position: absolute; left: 19px; top: 36px; bottom: -20px; width: 1px; background: var(--border); }
-  .milestone:last-child::before { display: none; }
-  .milestone-dot { width: 40px; height: 40px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; font-weight: 700; flex-shrink: 0; color: var(--muted); }
-  .milestone-dot.done { background: rgba(52,211,153,0.15); border-color: var(--success); color: var(--success); }
-  .milestone-dot.active { background: rgba(79,156,249,0.15); border-color: var(--accent); color: var(--accent); }
-  .milestone-content { flex: 1; padding-top: 8px; }
-  .milestone-month { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .milestone-focus { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-  .milestone-outcome { font-size: 12px; color: var(--muted); }
+/* ROADMAP */
+.milestone{display:flex;gap:16px;margin-bottom:20px;position:relative}
+.milestone::before{content:'';position:absolute;left:19px;top:40px;bottom:-20px;width:1px;background:var(--border)}
+.milestone:last-child::before{display:none}
+.milestone-dot{width:40px;height:40px;border-radius:50%;background:var(--surface2);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;flex-shrink:0;color:var(--muted)}
+.milestone-dot.done{background:rgba(52,211,153,0.12);border-color:var(--success);color:var(--success)}
+.milestone-dot.active{background:rgba(79,156,249,0.12);border-color:var(--accent);color:var(--accent)}
+.milestone-content{flex:1;padding-top:8px}
+.milestone-month{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.milestone-focus{font-size:14px;font-weight:600;margin-bottom:3px}
+.milestone-outcome{font-size:12px;color:var(--muted)}
 
-  .checkpoint-q { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; transition: background 0.15s; }
-  .checkpoint-q:hover { background: rgba(255,255,255,0.04); }
-  .check-box { width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-  .check-box.checked { background: var(--success); border-color: var(--success); }
-  .check-box.checked::after { content: '✓'; font-size: 12px; color: #fff; font-weight: 700; }
+/* ── CHECKPOINT REVAMP ── */
+.checkpoint-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.checkpoint-questions{display:flex;flex-direction:column;gap:10px}
+.checkpoint-q{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;user-select:none;transition:all 0.15s;display:flex;align-items:center;gap:12px}
+.checkpoint-q:hover{border-color:var(--border2);background:var(--surface3)}
+.checkpoint-q.checked{border-color:rgba(52,211,153,0.3);background:rgba(52,211,153,0.05)}
+.check-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;font-size:12px}
+.check-circle.checked{background:var(--success);border-color:var(--success);color:#fff}
+.checkpoint-q-text{font-size:13px;flex:1;line-height:1.4}
+.checkpoint-score-ring{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);text-align:center}
+.score-circle{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;position:relative;font-family:var(--mono)}
+.score-num{font-size:32px;font-weight:700}
+.score-den{font-size:14px;color:var(--muted)}
+.score-label{font-size:12px;color:var(--muted);margin-bottom:16px}
+.history-grid{display:flex;flex-direction:column;gap:8px}
+.history-row{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;align-items:center;gap:12px}
+.history-week{font-size:12px;color:var(--muted);flex:1;font-family:var(--mono)}
+.history-bars{display:flex;gap:4px;align-items:center}
+.history-bar{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
+.history-bar.hit{background:rgba(52,211,153,0.2);color:var(--success)}
+.history-bar.miss{background:rgba(255,255,255,0.05);color:var(--muted)}
+.history-score{font-family:var(--mono);font-size:13px;font-weight:700;min-width:30px;text-align:right}
+.trend-line{display:flex;gap:4px;align-items:flex-end;height:40px;margin-top:8px}
+.trend-bar{flex:1;border-radius:3px 3px 0 0;min-height:4px;transition:height 0.3s}
 
-  .divider { height: 1px; background: var(--border); margin: 20px 0; }
-  .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
-  .empty-icon { font-size: 32px; margin-bottom: 12px; }
-  .empty-text { font-size: 14px; }
+/* TRASH */
+.trash-banner{background:rgba(248,113,113,0.07);border:1px solid rgba(248,113,113,0.2);border-radius:var(--r);padding:11px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--danger)}
 
-  .tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; }
-  .tab { flex: 1; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; color: var(--muted); text-align: center; transition: all 0.15s; user-select: none; }
-  .tab.active { background: var(--surface2); color: var(--text); }
-  .tab-pane { display: none; }
-  .tab-pane.active { display: block; }
+/* MISC */
+.divider{height:1px;background:var(--border);margin:18px 0}
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-icon{font-size:30px;margin-bottom:10px;opacity:0.4}
+.empty-text{font-size:13px}
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+.flex-gap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.font-mono{font-family:var(--mono)}
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:4px}
+.tab{flex:1;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);text-align:center;transition:all 0.15s;user-select:none}
+.tab.active{background:var(--surface2);color:var(--text)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--accent);border-radius:var(--r);padding:11px 18px;font-size:13px;z-index:1000;transform:translateY(80px);opacity:0;transition:all 0.3s ease;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.terror{border-color:var(--danger)}
 
-  .sync-bar { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted); position: sticky; top: 0; z-index: 10; }
-  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
-  .sync-dot.synced { background: var(--success); }
-  .sync-dot.syncing { background: var(--accent3); animation: pulse 1s infinite; }
-  .sync-dot.error { background: var(--danger); }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--accent); border-radius: var(--radius); padding: 12px 18px; font-size: 13px; z-index: 1000; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; max-width: 300px; }
-  .toast.show { transform: translateY(0); opacity: 1; }
-  .toast.error { border-color: var(--danger); }
-
-  .trash-banner { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--danger); }
-
-  .flex-between { display: flex; justify-content: space-between; align-items: center; }
-  .flex-gap { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .mt-16 { margin-top: 16px; }
-  .font-mono { font-family: var(--mono); }
-  .text-muted { color: var(--muted); }
-
-  @media (max-width: 700px) {
-    .sidebar { display: none; }
-    .main { margin-left: 0; padding: 16px; }
-    .grid-4 { grid-template-columns: repeat(2, 1fr); }
-    .grid-2 { grid-template-columns: 1fr; }
-  }
+@media(max-width:700px){.sidebar{display:none}.main{margin-left:0}.grid-4{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.log-layout{grid-template-columns:1fr;height:auto}.log-detail-panel{display:none}.log-detail-panel.mobile-show{display:flex}.checkpoint-layout{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="sync-bar">
-  <div class="sync-dot" id="sync-dot"></div>
-  <span id="sync-status">Connecting to cloud...</span>
-  <span style="margin-left:auto;display:flex;gap:8px">
-    <button class="btn btn-sm" onclick="exportData()">Export backup</button>
-    <button class="btn btn-sm" onclick="forceSync()">Sync now</button>
-  </span>
+<div class="app">
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-tag">// learning OS</div>
+    <div class="logo-name">Sanket Patil</div>
+  </div>
+  <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">⬡</span> Dashboard</div>
+  <div class="nav-item" onclick="showPage('log')"><span class="nav-icon">◈</span> Daily Log</div>
+  <div class="nav-item" onclick="showPage('cheatsheets')"><span class="nav-icon">◷</span> Cheat Sheets</div>
+  <div class="nav-item" onclick="showPage('portfolio')"><span class="nav-icon">◎</span> Portfolio</div>
+  <div class="nav-item" onclick="showPage('roadmap')"><span class="nav-icon">◉</span> Roadmap</div>
+  <div class="nav-item" onclick="showPage('checkpoint')"><span class="nav-icon">◻</span> Checkpoint</div>
+  <div class="nav-item" onclick="showPage('trash')"><span class="nav-icon">🗑</span> Trash</div>
+  <div class="streak-card">
+    <div class="streak-label">Day streak</div>
+    <div class="streak-num" id="streak-display">0</div>
+    <div class="streak-sub">days in a row</div>
+  </div>
 </div>
 
-<div class="app">
-  <div class="sidebar">
-    <div class="logo">
-      <div class="logo-tag">// learning OS</div>
-      <div class="logo-name">Sanket Patil</div>
-    </div>
-    <div class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">⬡</span> Dashboard</div>
-    <div class="nav-item" onclick="showPage('log')"><span class="nav-icon">◈</span> Daily Log</div>
-    <div class="nav-item" onclick="showPage('cheatsheets')"><span class="nav-icon">◷</span> Cheat Sheets</div>
-    <div class="nav-item" onclick="showPage('portfolio')"><span class="nav-icon">◎</span> Portfolio</div>
-    <div class="nav-item" onclick="showPage('roadmap')"><span class="nav-icon">◉</span> Roadmap</div>
-    <div class="nav-item" onclick="showPage('checkpoint')"><span class="nav-icon">◻</span> Checkpoint</div>
-    <div class="nav-item" onclick="showPage('trash')"><span class="nav-icon">🗑</span> Trash</div>
-    <div class="streak-card">
-      <div class="streak-label">Day streak</div>
-      <div class="streak-num" id="streak-display">0</div>
-      <div class="streak-sub">days in a row</div>
-    </div>
+<div class="main">
+  <div class="sync-bar">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-status">Connecting...</span>
+    <span style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn btn-sm" onclick="exportData()">⬇ Export</button>
+      <button class="btn btn-sm" onclick="forceSync()">↻ Sync</button>
+    </span>
   </div>
 
-  <div class="main">
-
-    <!-- DASHBOARD -->
-    <div class="page active" id="page-dashboard">
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-inner">
       <div class="page-header">
         <div class="page-title">Week at a glance</div>
-        <div class="page-subtitle" id="week-label-header">Loading...</div>
+        <div class="page-subtitle" id="week-label-header"></div>
       </div>
       <div class="grid-4" style="margin-bottom:16px">
         <div class="metric"><div class="metric-val" style="color:var(--accent)" id="m-core">0</div><div class="metric-label">Core hrs</div></div>
@@ -209,26 +255,26 @@
         <div class="metric"><div class="metric-val" style="color:var(--accent4)" id="m-job">0</div><div class="metric-label">Job hunt hrs</div></div>
       </div>
       <div class="card">
-        <div class="card-title">Weekly quota</div>
+        <div class="card-title">Weekly quota — manual top-up</div>
         <div class="bucket">
           <div class="bucket-header"><span class="bucket-name" style="color:var(--accent)">🧠 Core Learning</span><span class="bucket-hrs font-mono" id="b-core-txt">0 / 12 hrs</span></div>
           <div class="progress-track"><div class="progress-fill" id="b-core-bar" style="width:0%;background:var(--accent)"></div></div>
-          <div class="bucket-add"><input class="hrs-input" type="number" id="in-core" min="0" max="12" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('core')">+ Log</button><button class="btn btn-sm btn-danger" onclick="resetBucket('core')">Reset</button></div>
+          <div class="bucket-add"><input class="hrs-input" type="number" id="in-core" min="0" max="12" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('core')">+ Add</button><button class="btn btn-sm btn-danger" onclick="resetBucket('core')">Reset</button></div>
         </div>
         <div class="bucket">
           <div class="bucket-header"><span class="bucket-name" style="color:var(--accent2)">🔨 Build / Break</span><span class="bucket-hrs font-mono" id="b-build-txt">0 / 6 hrs</span></div>
           <div class="progress-track"><div class="progress-fill" id="b-build-bar" style="width:0%;background:var(--accent2)"></div></div>
-          <div class="bucket-add"><input class="hrs-input" type="number" id="in-build" min="0" max="6" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('build')">+ Log</button><button class="btn btn-sm btn-danger" onclick="resetBucket('build')">Reset</button></div>
+          <div class="bucket-add"><input class="hrs-input" type="number" id="in-build" min="0" max="6" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('build')">+ Add</button><button class="btn btn-sm btn-danger" onclick="resetBucket('build')">Reset</button></div>
         </div>
         <div class="bucket">
-          <div class="bucket-header"><span class="bucket-name" style="color:var(--accent3)">📋 Retention Work</span><span class="bucket-hrs font-mono" id="b-retain-txt">0 / 4 hrs</span></div>
+          <div class="bucket-header"><span class="bucket-name" style="color:var(--accent3)">📋 Retention</span><span class="bucket-hrs font-mono" id="b-retain-txt">0 / 4 hrs</span></div>
           <div class="progress-track"><div class="progress-fill" id="b-retain-bar" style="width:0%;background:var(--accent3)"></div></div>
-          <div class="bucket-add"><input class="hrs-input" type="number" id="in-retain" min="0" max="4" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('retain')">+ Log</button><button class="btn btn-sm btn-danger" onclick="resetBucket('retain')">Reset</button></div>
+          <div class="bucket-add"><input class="hrs-input" type="number" id="in-retain" min="0" max="4" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('retain')">+ Add</button><button class="btn btn-sm btn-danger" onclick="resetBucket('retain')">Reset</button></div>
         </div>
         <div class="bucket">
           <div class="bucket-header"><span class="bucket-name" style="color:var(--accent4)">💼 Job Hunt</span><span class="bucket-hrs font-mono" id="b-job-txt">0 / 6 hrs</span></div>
           <div class="progress-track"><div class="progress-fill" id="b-job-bar" style="width:0%;background:var(--accent4)"></div></div>
-          <div class="bucket-add"><input class="hrs-input" type="number" id="in-job" min="0" max="6" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('job')">+ Log</button><button class="btn btn-sm btn-danger" onclick="resetBucket('job')">Reset</button></div>
+          <div class="bucket-add"><input class="hrs-input" type="number" id="in-job" min="0" max="6" step="0.5" placeholder="hrs"><button class="btn btn-sm" onclick="addHours('job')">+ Add</button><button class="btn btn-sm btn-danger" onclick="resetBucket('job')">Reset</button></div>
         </div>
       </div>
       <div class="card">
@@ -236,17 +282,31 @@
         <div id="recent-log"></div>
       </div>
     </div>
+  </div>
 
-    <!-- DAILY LOG -->
-    <div class="page" id="page-log">
+  <!-- DAILY LOG -->
+  <div class="page" id="page-log">
+    <div style="padding:20px 28px 0">
       <div class="page-header">
-        <div class="page-title">Daily log</div>
-        <div class="page-subtitle">Log every module, topic, or session you complete.</div>
+        <div class="flex-between">
+          <div>
+            <div class="page-title">Daily log</div>
+            <div class="page-subtitle">Click an entry to read it. Your notes are preserved exactly as written.</div>
+          </div>
+          <button class="btn btn-primary" onclick="showLogForm()">+ New entry</button>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-title">Add today's entry</div>
+    </div>
+
+    <!-- NEW ENTRY FORM (hidden by default) -->
+    <div id="log-form-container" style="display:none;padding:0 28px 16px">
+      <div class="card" style="margin-bottom:0">
+        <div class="flex-between" style="margin-bottom:16px">
+          <div class="card-title" style="margin:0">New entry</div>
+          <button class="btn-ghost btn btn-sm" onclick="hideLogForm()">✕ Cancel</button>
+        </div>
         <div class="grid-2">
-          <div class="form-group"><label class="form-label">Topic / Module</label><input class="form-input" id="log-topic" placeholder="e.g. Kubernetes Pods & Deployments"></div>
+          <div class="form-group"><label class="form-label">Topic / Module</label><input class="form-input" id="log-topic" placeholder="e.g. Terraform Multiple Providers"></div>
           <div class="form-group"><label class="form-label">Platform / Source</label><input class="form-input" id="log-source" placeholder="e.g. KodeKloud DevOps Path"></div>
         </div>
         <div class="grid-2">
@@ -260,8 +320,11 @@
           </div>
           <div class="form-group"><label class="form-label">Time spent (hrs)</label><input class="form-input" id="log-hours" type="number" min="0.25" max="12" step="0.25" placeholder="e.g. 1.5"></div>
         </div>
-        <div class="form-group"><label class="form-label">Key insight / teach-it-back</label><textarea class="form-textarea" id="log-notes" placeholder="Explain this concept in your own words — no looking back."></textarea></div>
-        <div class="form-group"><label class="form-label">Confidence after this session</label>
+        <div class="form-group">
+          <label class="form-label">Key insight / teach-it-back</label>
+          <textarea class="form-textarea" id="log-notes" placeholder="Explain this concept in your own words.&#10;&#10;Use line breaks freely — your formatting is preserved exactly as written.&#10;&#10;Commands, analogies, bullet points — write it how you'd teach it."></textarea>
+        </div>
+        <div class="form-group"><label class="form-label">Confidence</label>
           <select class="form-select" id="log-confidence">
             <option value="low">🟡 Low — need more practice</option>
             <option value="medium">🟠 Medium — getting it</option>
@@ -270,21 +333,32 @@
         </div>
         <button class="btn btn-primary" onclick="addLogEntry()">Save entry</button>
       </div>
-      <div class="card">
-        <div class="flex-between" style="margin-bottom:16px">
-          <div class="card-title" style="margin:0">All entries</div>
-          <input class="form-input" id="log-search" style="width:200px;padding:6px 12px;font-size:12px" placeholder="Search topics..." oninput="renderLog()">
-        </div>
-        <div id="log-list"></div>
-      </div>
     </div>
 
-    <!-- CHEAT SHEETS -->
-    <div class="page" id="page-cheatsheets">
-      <div class="page-header">
-        <div class="page-title">Cheat sheets</div>
-        <div class="page-subtitle">One page per topic. Your permanent knowledge base.</div>
+    <!-- GMAIL LAYOUT -->
+    <div style="padding:0 28px 28px;flex:1">
+      <div class="log-layout">
+        <div class="log-list-panel">
+          <div class="log-search-bar">
+            <input class="log-search-input" id="log-search" placeholder="Search entries..." oninput="renderLogList()">
+          </div>
+          <div id="log-list-items" style="flex:1"></div>
+        </div>
+        <div class="log-detail-panel" id="log-detail-panel">
+          <div class="log-detail-empty" id="log-detail-empty">
+            <div class="log-detail-empty-icon">◈</div>
+            <div style="font-size:13px">Select an entry to read</div>
+          </div>
+          <div id="log-detail-content" style="display:none;flex:1;display:none;flex-direction:column"></div>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- CHEAT SHEETS -->
+  <div class="page" id="page-cheatsheets">
+    <div class="page-inner">
+      <div class="page-header"><div class="page-title">Cheat sheets</div><div class="page-subtitle">One page per topic. Your permanent knowledge base.</div></div>
       <div class="tabs">
         <div class="tab active" onclick="switchTab('cs','create')">+ New sheet</div>
         <div class="tab" onclick="switchTab('cs','view')">All sheets</div>
@@ -292,27 +366,26 @@
       <div class="tab-pane active" id="cs-create">
         <div class="card">
           <div class="card-title">New cheat sheet</div>
-          <div class="form-group"><label class="form-label">Topic name</label><input class="form-input" id="cs-topic" placeholder="e.g. Kubernetes Pods"></div>
-          <div class="form-group"><label class="form-label">Analogy (your own words)</label><input class="form-input" id="cs-analogy" placeholder="e.g. A pod is like a flat — containers live inside it"></div>
-          <div class="form-group"><label class="form-label">Problem it solves</label><textarea class="form-textarea" style="min-height:60px" id="cs-problem" placeholder="Why does this exist? What problem did we have before it?"></textarea></div>
-          <div class="form-group"><label class="form-label">Key commands / config</label><textarea class="form-textarea" id="cs-commands" placeholder="kubectl get pods&#10;kubectl describe pod [name]&#10;kubectl delete pod [name]"></textarea></div>
+          <div class="form-group"><label class="form-label">Topic</label><input class="form-input" id="cs-topic" placeholder="e.g. Terraform Providers"></div>
+          <div class="form-group"><label class="form-label">Analogy</label><input class="form-input" id="cs-analogy" placeholder="e.g. Providers are attachments — terraform is the tool"></div>
+          <div class="form-group"><label class="form-label">Problem it solves</label><textarea class="form-textarea" style="min-height:60px" id="cs-problem" placeholder="Why does this exist?"></textarea></div>
+          <div class="form-group"><label class="form-label">Key commands / config</label><textarea class="form-textarea" id="cs-commands" placeholder="terraform init&#10;terraform plan&#10;terraform apply&#10;terraform destroy"></textarea></div>
           <div class="form-group"><label class="form-label">Real job scenario</label><textarea class="form-textarea" style="min-height:60px" id="cs-scenario" placeholder="When would you use this in a support/engineering role?"></textarea></div>
           <div class="grid-2">
-            <div class="form-group"><label class="form-label">AWS equivalent</label><input class="form-input" id="cs-aws" placeholder="e.g. ECS Task / EKS Pod"></div>
-            <div class="form-group"><label class="form-label">Azure / GCP equivalent</label><input class="form-input" id="cs-azure" placeholder="e.g. AKS Pod / GKE Pod"></div>
+            <div class="form-group"><label class="form-label">AWS equivalent</label><input class="form-input" id="cs-aws" placeholder="e.g. CloudFormation"></div>
+            <div class="form-group"><label class="form-label">Azure / GCP equivalent</label><input class="form-input" id="cs-azure" placeholder="e.g. ARM Templates / Deployment Manager"></div>
           </div>
           <button class="btn btn-primary" onclick="saveCheatSheet()">Save cheat sheet</button>
         </div>
       </div>
       <div class="tab-pane" id="cs-view"><div id="cs-list"></div></div>
     </div>
+  </div>
 
-    <!-- PORTFOLIO -->
-    <div class="page" id="page-portfolio">
-      <div class="page-header">
-        <div class="page-title">Portfolio log</div>
-        <div class="page-subtitle">Every real thing you build or break. Your proof of work.</div>
-      </div>
+  <!-- PORTFOLIO -->
+  <div class="page" id="page-portfolio">
+    <div class="page-inner">
+      <div class="page-header"><div class="page-title">Portfolio log</div><div class="page-subtitle">Every real thing you build or break. Your proof of work.</div></div>
       <div class="card">
         <div class="card-title">Add project</div>
         <div class="grid-2">
@@ -336,451 +409,420 @@
         <div class="card-title">12-week build targets</div>
         <div id="build-targets"></div>
       </div>
-      <div class="card" style="margin-top:16px">
-        <div class="card-title">My projects</div>
-        <div id="portfolio-list"></div>
-      </div>
+      <div class="card" style="margin-top:0"><div class="card-title">My projects</div><div id="portfolio-list"></div></div>
     </div>
+  </div>
 
-    <!-- ROADMAP -->
-    <div class="page" id="page-roadmap">
-      <div class="page-header">
-        <div class="page-title">6-month roadmap</div>
-        <div class="page-subtitle">March → September 2026.</div>
-      </div>
+  <!-- ROADMAP -->
+  <div class="page" id="page-roadmap">
+    <div class="page-inner">
+      <div class="page-header"><div class="page-title">6-month roadmap</div><div class="page-subtitle">March → September 2026</div></div>
       <div class="card"><div id="roadmap-items"></div></div>
     </div>
+  </div>
 
-    <!-- CHECKPOINT -->
-    <div class="page" id="page-checkpoint">
-      <div class="page-header">
-        <div class="page-title">Weekly checkpoint</div>
-        <div class="page-subtitle">Run this once a week. Honest answers only.</div>
-      </div>
-      <div class="card">
-        <div class="card-title">This week's 4 questions</div>
-        <div id="checkpoint-items"></div>
-        <div class="divider"></div>
-        <div class="flex-between">
-          <div id="checkpoint-score" class="font-mono" style="font-size:13px;color:var(--muted)">0/4 complete</div>
-          <button class="btn btn-primary" onclick="saveCheckpoint()">Save checkpoint</button>
+  <!-- CHECKPOINT -->
+  <div class="page" id="page-checkpoint">
+    <div class="page-inner">
+      <div class="page-header"><div class="page-title">Weekly checkpoint</div><div class="page-subtitle">Run once a week. Honest answers only.</div></div>
+      <div class="checkpoint-layout">
+        <div>
+          <div class="card">
+            <div class="card-title">This week</div>
+            <div class="checkpoint-questions" id="checkpoint-items"></div>
+            <div class="divider"></div>
+            <button class="btn btn-primary" style="width:100%" onclick="saveCheckpoint()">Save this week</button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title">Score</div>
+            <div class="checkpoint-score-ring">
+              <div class="score-circle" id="score-circle">
+                <div><span class="score-num" id="score-num">0</span><span class="score-den">/4</span></div>
+              </div>
+              <div class="score-label" id="score-label">Answer the questions</div>
+              <div class="trend-line" id="trend-line" style="width:100%"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">History</div>
+            <div id="checkpoint-history"></div>
+          </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-title">Checkpoint history</div>
-        <div id="checkpoint-history"></div>
-      </div>
     </div>
+  </div>
 
-    <!-- TRASH -->
-    <div class="page" id="page-trash">
-      <div class="page-header">
-        <div class="page-title">Trash</div>
-        <div class="page-subtitle">Items deleted in the last 30 days. Restore or permanently delete.</div>
-      </div>
+  <!-- TRASH -->
+  <div class="page" id="page-trash">
+    <div class="page-inner">
+      <div class="page-header"><div class="page-title">Trash</div><div class="page-subtitle">Items deleted in the last 30 days. Restore or permanently delete.</div></div>
       <div id="trash-list"></div>
     </div>
-
   </div>
-</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL = 'https://lbsyqywliraiutlycsqm.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_rvR86kq2P-KpDsspn8dKQw_CjuajjoF';
-const USER_ID = 'sanket';
+const SUPABASE_URL='https://lbsyqywliraiutlycsqm.supabase.co';
+const SUPABASE_KEY='sb_publishable_rvR86kq2P-KpDsspn8dKQw_CjuajjoF';
+const USER_ID='sanket';
+const {createClient}=supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+let state={week:getWeekKey(),buckets:{core:0,build:0,retain:0,job:0},logs:[],cheatsheets:[],portfolio:[],checkpoints:[],lastLogDate:null,streak:0};
+let syncTimeout=null,isSyncing=false,selectedLogId=null;
+let checkState=[false,false,false,false];
 
-let state = {
-  week: getWeekKey(),
-  buckets: { core: 0, build: 0, retain: 0, job: 0 },
-  logs: [],
-  cheatsheets: [],
-  portfolio: [],
-  checkpoints: [],
-  trash: [],
-  lastLogDate: null,
-  streak: 0
-};
+function getWeekKey(){const n=new Date(),j=new Date(n.getFullYear(),0,1),w=Math.ceil(((n-j)/86400000+j.getDay()+1)/7);return`${n.getFullYear()}-W${w}`}
+function getWeekLabel(){const n=new Date(),d=n.getDay(),m=new Date(n);m.setDate(n.getDate()-(d===0?6:d-1));const s=new Date(m);s.setDate(m.getDate()+6);const f=x=>x.toLocaleDateString('en-IN',{day:'numeric',month:'short'});return`Week of ${f(m)} – ${f(s)}`}
 
-let syncTimeout = null;
-let isSyncing = false;
+function setSyncStatus(s,msg){document.getElementById('sync-dot').className='sync-dot '+s;document.getElementById('sync-status').textContent=msg}
 
-function getWeekKey() {
-  const now = new Date();
-  const jan1 = new Date(now.getFullYear(), 0, 1);
-  const week = Math.ceil(((now - jan1) / 86400000 + jan1.getDay() + 1) / 7);
-  return `${now.getFullYear()}-W${week}`;
-}
-
-function getWeekLabel() {
-  const now = new Date();
-  const day = now.getDay();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  const fmt = d => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-  return `Week of ${fmt(monday)} – ${fmt(sunday)}`;
-}
-
-function setSyncStatus(status, msg) {
-  const dot = document.getElementById('sync-dot');
-  const txt = document.getElementById('sync-status');
-  dot.className = 'sync-dot ' + status;
-  txt.textContent = msg;
-}
-
-async function loadFromCloud() {
-  setSyncStatus('syncing', 'Loading from cloud...');
-  try {
-    const keys = ['buckets','logs','cheatsheets','portfolio','checkpoints','trash','meta'];
-    const { data, error } = await sb.from('tracker_data').select('data_key,data_value').eq('user_id', USER_ID).in('data_key', keys);
-    if (error) throw error;
-
-    if (data && data.length > 0) {
-      data.forEach(row => {
-        if (row.data_key === 'buckets') {
-          const saved = row.data_value;
-          if (saved.week !== getWeekKey()) {
-            state.buckets = { core: 0, build: 0, retain: 0, job: 0 };
-            state.week = getWeekKey();
-          } else {
-            state.buckets = saved.buckets || state.buckets;
-            state.week = saved.week;
-          }
-        } else if (row.data_key === 'meta') {
-          state.lastLogDate = row.data_value.lastLogDate;
-          state.streak = row.data_value.streak || 0;
-        } else {
-          state[row.data_key] = row.data_value || [];
-        }
+async function loadFromCloud(){
+  setSyncStatus('syncing','Loading...');
+  try{
+    const keys=['buckets','logs','cheatsheets','portfolio','checkpoints','meta'];
+    const{data,error}=await sb.from('tracker_data').select('data_key,data_value').eq('user_id',USER_ID).in('data_key',keys);
+    if(error)throw error;
+    if(data&&data.length){
+      data.forEach(row=>{
+        if(row.data_key==='buckets'){
+          const sv=row.data_value;
+          if(sv.week!==getWeekKey()){state.buckets={core:0,build:0,retain:0,job:0};state.week=getWeekKey();}
+          else{state.buckets=sv.buckets||state.buckets;state.week=sv.week;}
+        }else if(row.data_key==='meta'){
+          state.lastLogDate=row.data_value.lastLogDate;state.streak=row.data_value.streak||0;
+        }else{state[row.data_key]=row.data_value||[];}
       });
     }
-
-    setSyncStatus('synced', 'Synced · ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+    setSyncStatus('synced','Synced · '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
     renderAll();
-  } catch (e) {
-    setSyncStatus('error', 'Cloud error — working offline');
-    loadLocal();
-  }
+  }catch(e){setSyncStatus('error','Offline — working locally');loadLocal();}
 }
 
-function loadLocal() {
-  const raw = localStorage.getItem('sanket_tracker_v2');
-  if (!raw) return;
-  const saved = JSON.parse(raw);
-  if (saved.week !== getWeekKey()) saved.buckets = { core: 0, build: 0, retain: 0, job: 0 };
-  Object.assign(state, saved);
-  renderAll();
-}
+function loadLocal(){const r=localStorage.getItem('sanket_tracker_v3');if(!r)return;const s=JSON.parse(r);if(s.week!==getWeekKey())s.buckets={core:0,build:0,retain:0,job:0};Object.assign(state,s);renderAll();}
 
-async function saveToCloud() {
-  localStorage.setItem('sanket_tracker_v2', JSON.stringify(state));
-  if (isSyncing) return;
-  isSyncing = true;
-  setSyncStatus('syncing', 'Saving...');
-  try {
-    const rows = [
-      { user_id: USER_ID, data_key: 'buckets', data_value: { buckets: state.buckets, week: state.week } },
-      { user_id: USER_ID, data_key: 'logs', data_value: state.logs },
-      { user_id: USER_ID, data_key: 'cheatsheets', data_value: state.cheatsheets },
-      { user_id: USER_ID, data_key: 'portfolio', data_value: state.portfolio },
-      { user_id: USER_ID, data_key: 'checkpoints', data_value: state.checkpoints },
-      { user_id: USER_ID, data_key: 'trash', data_value: state.trash },
-      { user_id: USER_ID, data_key: 'meta', data_value: { lastLogDate: state.lastLogDate, streak: state.streak } },
+async function saveToCloud(){
+  localStorage.setItem('sanket_tracker_v3',JSON.stringify(state));
+  if(isSyncing)return;isSyncing=true;setSyncStatus('syncing','Saving...');
+  try{
+    const rows=[
+      {user_id:USER_ID,data_key:'buckets',data_value:{buckets:state.buckets,week:state.week}},
+      {user_id:USER_ID,data_key:'logs',data_value:state.logs},
+      {user_id:USER_ID,data_key:'cheatsheets',data_value:state.cheatsheets},
+      {user_id:USER_ID,data_key:'portfolio',data_value:state.portfolio},
+      {user_id:USER_ID,data_key:'checkpoints',data_value:state.checkpoints},
+      {user_id:USER_ID,data_key:'meta',data_value:{lastLogDate:state.lastLogDate,streak:state.streak}},
     ];
-    const { error } = await sb.from('tracker_data').upsert(rows, { onConflict: 'user_id,data_key' });
-    if (error) throw error;
-    setSyncStatus('synced', 'Synced · ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
-  } catch (e) {
-    setSyncStatus('error', 'Sync failed — saved locally');
-  }
-  isSyncing = false;
+    const{error}=await sb.from('tracker_data').upsert(rows,{onConflict:'user_id,data_key'});
+    if(error)throw error;
+    setSyncStatus('synced','Synced · '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
+  }catch(e){setSyncStatus('error','Sync failed — saved locally');}
+  isSyncing=false;
 }
 
-function scheduleSave() {
-  clearTimeout(syncTimeout);
-  syncTimeout = setTimeout(saveToCloud, 800);
-}
+function scheduleSave(){clearTimeout(syncTimeout);syncTimeout=setTimeout(saveToCloud,800);}
+async function forceSync(){await loadFromCloud();toast('Synced');}
+function exportData(){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`tracker_backup_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('Backup downloaded');}
 
-async function forceSync() { await loadFromCloud(); toast('Synced from cloud'); }
-
-function exportData() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `learning_tracker_backup_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  toast('Backup downloaded');
-}
-
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  const pages = ['dashboard','log','cheatsheets','portfolio','roadmap','checkpoint','trash'];
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const pages=['dashboard','log','cheatsheets','portfolio','roadmap','checkpoint','trash'];
   document.querySelectorAll('.nav-item')[pages.indexOf(id)]?.classList.add('active');
-  if (id === 'trash') renderTrash();
-  if (id === 'cheatsheets') renderCheatSheets();
+  if(id==='trash')renderTrash();
+  if(id==='cheatsheets'&&document.getElementById('cs-view').classList.contains('active'))renderCheatSheets();
 }
 
-function switchTab(group, tab) {
-  const tabs = document.querySelectorAll('.tabs .tab');
-  const panes = group === 'cs' ? ['create','view'] : [];
-  tabs.forEach((t, i) => t.classList.toggle('active', panes[i] === tab));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === group + '-' + tab));
-  if (tab === 'view') renderCheatSheets();
+function switchTab(g,t){
+  document.querySelectorAll('.tabs .tab').forEach((x,i)=>x.classList.toggle('active',['create','view'][i]===t));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.toggle('active',p.id===g+'-'+t));
+  if(t==='view')renderCheatSheets();
 }
 
-const TARGET = { core: 12, build: 6, retain: 4, job: 6 };
+const TARGET={core:12,build:6,retain:4,job:6};
+const BUCKET_MAP={core:'core',build:'build',retention:'retain',job:'job'};
 
-function addHours(bucket) {
-  const val = parseFloat(document.getElementById('in-' + bucket).value);
-  if (!val || val <= 0) { toast('Enter valid hours'); return; }
-  state.buckets[bucket] = Math.min(TARGET[bucket], (state.buckets[bucket] || 0) + val);
-  document.getElementById('in-' + bucket).value = '';
-  scheduleSave();
-  renderDashboard();
-  toast('Hours logged!');
+function addHours(bucket){
+  const v=parseFloat(document.getElementById('in-'+bucket).value);
+  if(!v||v<=0){toast('Enter valid hours');return;}
+  state.buckets[bucket]=Math.min(TARGET[bucket],(state.buckets[bucket]||0)+v);
+  document.getElementById('in-'+bucket).value='';
+  scheduleSave();renderDashboard();toast('Hours added!');
 }
 
-function resetBucket(bucket) {
-  state.buckets[bucket] = 0;
-  scheduleSave();
-  renderDashboard();
-}
+function resetBucket(b){state.buckets[b]=0;scheduleSave();renderDashboard();}
 
-function renderDashboard() {
-  document.getElementById('week-label-header').textContent = getWeekLabel();
-  const keys = ['core','build','retain','job'];
-  const targets = [12, 6, 4, 6];
-  keys.forEach((k, i) => {
-    const val = state.buckets[k] || 0;
-    const pct = Math.min(100, (val / targets[i]) * 100);
-    document.getElementById('m-' + k).textContent = val.toFixed(1);
-    document.getElementById('b-' + k + '-txt').textContent = `${val.toFixed(1)} / ${targets[i]} hrs`;
-    document.getElementById('b-' + k + '-bar').style.width = pct + '%';
+function renderDashboard(){
+  document.getElementById('week-label-header').textContent=getWeekLabel();
+  const keys=['core','build','retain','job'],targets=[12,6,4,6];
+  keys.forEach((k,i)=>{
+    const v=state.buckets[k]||0,pct=Math.min(100,(v/targets[i])*100);
+    document.getElementById('m-'+k).textContent=v.toFixed(1);
+    document.getElementById('b-'+k+'-txt').textContent=`${v.toFixed(1)} / ${targets[i]} hrs`;
+    document.getElementById('b-'+k+'-bar').style.width=pct+'%';
   });
-  const recent = [...state.logs].reverse().slice(0, 5);
-  const el = document.getElementById('recent-log');
-  el.innerHTML = recent.length ? recent.map(renderLogItem).join('') : '<div class="empty"><div class="empty-icon">◎</div><div class="empty-text">No entries yet.</div></div>';
-  document.getElementById('streak-display').textContent = state.streak || 0;
+  const recent=[...state.logs].filter(l=>!l.deleted).reverse().slice(0,5);
+  const el=document.getElementById('recent-log');
+  el.innerHTML=recent.length?recent.map(e=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <span class="tag tag-${getTagKey(e.bucket)}">${getTagLabel(e.bucket)}</span>
+      <span style="flex:1;font-size:13px;font-weight:500">${e.topic}</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">${e.hours}h</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">${e.date}</span>
+    </div>`).join(''):'<div class="empty"><div class="empty-icon">◎</div><div class="empty-text">No entries yet.</div></div>';
+  document.getElementById('streak-display').textContent=state.streak||0;
 }
 
-function getTagClass(b) { return { core:'tag-core', build:'tag-build', retention:'tag-retention', job:'tag-job' }[b] || 'tag-core'; }
-function getTagLabel(b) { return { core:'Core', build:'Build', retention:'Retention', job:'Job Hunt' }[b] || b; }
-function getConf(c) { return { low:'🟡 Low', medium:'🟠 Medium', high:'🟢 High' }[c] || c; }
+function getTagKey(b){return{core:'core',build:'build',retention:'retention',job:'job'}[b]||'core';}
+function getTagLabel(b){return{core:'Core',build:'Build',retention:'Retention',job:'Job Hunt'}[b]||b;}
+function getConfClass(c){return{low:'conf-low',medium:'conf-medium',high:'conf-high'}[c]||'conf-low';}
+function getConfLabel(c){return{low:'🟡 Low',medium:'🟠 Medium',high:'🟢 High'}[c]||c;}
 
-function renderLogItem(entry, showRestore) {
-  return `<div class="log-entry" style="${entry.deleted ? 'opacity:0.6' : ''}">
-    <div class="log-date">${entry.date}</div>
-    <div class="log-content">
-      <div class="log-topic">${entry.topic} <span class="tag ${getTagClass(entry.bucket)}">${getTagLabel(entry.bucket)}</span>${entry.deleted ? ' <span class="tag tag-trash">Trash</span>' : ''}</div>
-      <div class="log-meta">${entry.source} · ${entry.hours}h · ${getConf(entry.confidence)}</div>
-      ${entry.notes ? `<div class="log-notes">"${entry.notes}"</div>` : ''}
-    </div>
-    ${showRestore ? `
-      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-        <button class="btn btn-sm btn-success" onclick="restoreItem('logs',${entry.id})">Restore</button>
-        <button class="btn btn-sm btn-danger" onclick="permDelete('logs',${entry.id})">Delete</button>
-      </div>` : `<button class="btn btn-sm btn-danger" style="flex-shrink:0;align-self:flex-start" onclick="softDelete('logs',${entry.id})">×</button>`}
-  </div>`;
-}
+// LOG FORM
+function showLogForm(){document.getElementById('log-form-container').style.display='block';document.getElementById('log-topic').focus();}
+function hideLogForm(){document.getElementById('log-form-container').style.display='none';}
 
-function addLogEntry() {
-  const topic = document.getElementById('log-topic').value.trim();
-  const hours = parseFloat(document.getElementById('log-hours').value);
-  if (!topic) { toast('Enter a topic name'); return; }
-  if (!hours || hours <= 0) { toast('Enter valid hours'); return; }
-  const entry = {
-    id: Date.now(),
-    date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'2-digit' }),
+function addLogEntry(){
+  const topic=document.getElementById('log-topic').value.trim();
+  const hours=parseFloat(document.getElementById('log-hours').value);
+  if(!topic){toast('Enter a topic name');return;}
+  if(!hours||hours<=0){toast('Enter valid hours');return;}
+  const bucket=document.getElementById('log-bucket').value;
+  const entry={
+    id:Date.now(),
+    date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}),
     topic,
-    source: document.getElementById('log-source').value.trim() || 'KodeKloud',
-    bucket: document.getElementById('log-bucket').value,
-    hours,
-    notes: document.getElementById('log-notes').value.trim(),
-    confidence: document.getElementById('log-confidence').value,
-    deleted: false
+    source:document.getElementById('log-source').value.trim()||'KodeKloud',
+    bucket,hours,
+    notes:document.getElementById('log-notes').value,
+    confidence:document.getElementById('log-confidence').value,
+    deleted:false,
+    createdAt:Date.now()
   };
   state.logs.push(entry);
+  // AUTO-UPDATE BUCKET HOURS
+  const bk=BUCKET_MAP[bucket]||bucket;
+  if(state.buckets[bk]!==undefined){
+    state.buckets[bk]=Math.min(TARGET[bk],(state.buckets[bk]||0)+hours);
+  }
   updateStreak();
   scheduleSave();
-  renderLog();
+  renderLogList();
   renderDashboard();
-  ['log-topic','log-source','log-hours','log-notes'].forEach(id => document.getElementById(id).value = '');
-  toast('Entry saved!');
+  ['log-topic','log-source','log-hours','log-notes'].forEach(id=>document.getElementById(id).value='');
+  hideLogForm();
+  toast('Entry saved — bucket updated!');
 }
 
-function updateStreak() {
-  const today = new Date().toDateString();
-  if (state.lastLogDate === today) return;
-  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-  state.streak = state.lastLogDate === yesterday.toDateString() ? (state.streak || 0) + 1 : 1;
-  state.lastLogDate = today;
+function updateStreak(){
+  const today=new Date().toDateString();
+  if(state.lastLogDate===today)return;
+  const y=new Date();y.setDate(y.getDate()-1);
+  state.streak=state.lastLogDate===y.toDateString()?(state.streak||0)+1:1;
+  state.lastLogDate=today;
 }
 
-function renderLog() {
-  const search = (document.getElementById('log-search')?.value || '').toLowerCase();
-  const active = [...state.logs].filter(l => !l.deleted).reverse().filter(l => !search || l.topic.toLowerCase().includes(search) || (l.notes||'').toLowerCase().includes(search));
-  const el = document.getElementById('log-list');
-  el.innerHTML = active.length ? active.map(e => renderLogItem(e, false)).join('') : '<div class="empty"><div class="empty-icon">◈</div><div class="empty-text">No entries yet.</div></div>';
+// GMAIL LOG LAYOUT
+function renderLogList(){
+  const search=(document.getElementById('log-search')?.value||'').toLowerCase();
+  const active=[...state.logs].filter(l=>!l.deleted).reverse()
+    .filter(l=>!search||l.topic.toLowerCase().includes(search)||(l.notes||'').toLowerCase().includes(search));
+  const el=document.getElementById('log-list-items');
+  if(!active.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">◈</div><div class="empty-text">No entries yet.</div></div>';
+    return;
+  }
+  el.innerHTML=active.map(e=>`
+    <div class="log-list-item ${selectedLogId===e.id?'selected':''}" onclick="selectLog(${e.id})">
+      <div class="log-item-top">
+        <div class="log-item-topic">${e.topic}</div>
+        <div class="log-item-date">${e.date}</div>
+      </div>
+      <div class="log-item-meta">
+        <span class="tag tag-${getTagKey(e.bucket)}" style="font-size:9px;padding:1px 6px">${getTagLabel(e.bucket)}</span>
+        <span style="font-size:11px;color:var(--muted)">${e.hours}h</span>
+        <span class="conf-badge ${getConfClass(e.confidence)}" style="font-size:9px;padding:1px 6px">${getConfLabel(e.confidence)}</span>
+      </div>
+      ${e.notes?`<div class="log-item-preview">${e.notes.replace(/\n/g,' ')}</div>`:''}
+    </div>`).join('');
 }
 
-function softDelete(type, id) {
-  const arr = state[type];
-  const item = arr.find(i => i.id === id);
-  if (!item) return;
-  item.deleted = true;
-  item.deletedAt = Date.now();
-  scheduleSave();
-  renderLog();
-  renderDashboard();
+function selectLog(id){
+  selectedLogId=id;
+  renderLogList();
+  const entry=state.logs.find(l=>l.id===id);
+  if(!entry)return;
+  const empty=document.getElementById('log-detail-empty');
+  const content=document.getElementById('log-detail-content');
+  empty.style.display='none';
+  content.style.display='flex';
+  content.innerHTML=`
+    <div class="log-detail-content">
+      <div class="log-detail-header">
+        <div class="log-detail-topic">${entry.topic}</div>
+        <div class="log-detail-meta">
+          <span class="tag tag-${getTagKey(entry.bucket)}">${getTagLabel(entry.bucket)}</span>
+          <span class="conf-badge ${getConfClass(entry.confidence)}">${getConfLabel(entry.confidence)}</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">${entry.hours}h · ${entry.source}</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">${entry.date}</span>
+        </div>
+      </div>
+      ${entry.notes?`
+        <div class="log-detail-section">
+          <div class="log-detail-label">Teach-it-back / Key insight</div>
+          <div class="log-detail-value">${escHtml(entry.notes)}</div>
+        </div>`:'<div style="color:var(--muted);font-size:13px;font-style:italic">No notes recorded for this entry.</div>'}
+    </div>
+    <div class="log-detail-actions">
+      <button class="btn btn-danger btn-sm" onclick="softDelete(${entry.id})">🗑 Move to trash</button>
+    </div>`;
+}
+
+function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function softDelete(id){
+  const item=state.logs.find(l=>l.id===id);
+  if(!item)return;
+  item.deleted=true;item.deletedAt=Date.now();
+  selectedLogId=null;
+  document.getElementById('log-detail-empty').style.display='flex';
+  document.getElementById('log-detail-content').style.display='none';
+  scheduleSave();renderLogList();renderDashboard();
   toast('Moved to trash — restore anytime within 30 days');
 }
 
-function restoreItem(type, id) {
-  const item = state[type].find(i => i.id === id);
-  if (!item) return;
-  item.deleted = false;
-  delete item.deletedAt;
-  scheduleSave();
-  renderTrash();
-  renderLog();
-  renderDashboard();
+function restoreItem(id){
+  const item=state.logs.find(l=>l.id===id);
+  if(!item)return;
+  item.deleted=false;delete item.deletedAt;
+  scheduleSave();renderTrash();renderLogList();renderDashboard();
   toast('Restored!');
 }
 
-function permDelete(type, id) {
-  state[type] = state[type].filter(i => i.id !== id);
-  scheduleSave();
-  renderTrash();
+function permDelete(id){state.logs=state.logs.filter(l=>l.id!==id);scheduleSave();renderTrash();}
+
+function renderTrash(){
+  const now=Date.now(),thirty=30*24*60*60*1000;
+  const trashed=state.logs.filter(l=>l.deleted&&(now-l.deletedAt)<thirty);
+  state.logs=state.logs.filter(l=>!l.deleted||(now-l.deletedAt)<thirty);
+  const el=document.getElementById('trash-list');
+  if(!trashed.length){el.innerHTML='<div class="card"><div class="empty"><div class="empty-icon">🗑</div><div class="empty-text">Trash is empty.</div></div></div>';return;}
+  el.innerHTML=`<div class="trash-banner"><span>${trashed.length} item(s) — auto-deleted after 30 days</span><button class="btn btn-sm btn-danger" onclick="emptyTrash()">Empty trash</button></div>`+
+    trashed.map(e=>`
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">${e.topic} <span class="tag tag-trash">Trash</span></div>
+          <div style="font-size:11px;color:var(--muted)">${e.source} · ${e.hours}h · ${e.date}</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-success" onclick="restoreItem(${e.id})">↩ Restore</button>
+          <button class="btn btn-sm btn-danger" onclick="permDelete(${e.id})">✕ Delete</button>
+        </div>
+      </div>`).join('');
 }
 
-function renderTrash() {
-  const now = Date.now();
-  const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-  const trashed = state.logs.filter(l => l.deleted && (now - l.deletedAt) < thirtyDays);
-  const expired = state.logs.filter(l => l.deleted && (now - l.deletedAt) >= thirtyDays);
-  if (expired.length) { state.logs = state.logs.filter(l => !expired.find(e => e.id === l.id)); scheduleSave(); }
-  const el = document.getElementById('trash-list');
-  if (!trashed.length) {
-    el.innerHTML = '<div class="card"><div class="empty"><div class="empty-icon">🗑</div><div class="empty-text">Trash is empty.</div></div></div>';
-    return;
-  }
-  el.innerHTML = `<div class="trash-banner"><span>${trashed.length} item(s) in trash — auto-deleted after 30 days</span><button class="btn btn-sm btn-danger" onclick="emptyTrash()">Empty trash</button></div>` +
-    trashed.map(e => renderLogItem(e, true)).join('');
-}
+function emptyTrash(){state.logs=state.logs.filter(l=>!l.deleted);scheduleSave();renderTrash();toast('Trash emptied');}
 
-function emptyTrash() {
-  state.logs = state.logs.filter(l => !l.deleted);
-  scheduleSave();
-  renderTrash();
-  toast('Trash emptied');
-}
-
-function saveCheatSheet() {
-  const topic = document.getElementById('cs-topic').value.trim();
-  if (!topic) { toast('Enter topic name'); return; }
-  state.cheatsheets.push({
-    id: Date.now(),
-    topic,
-    analogy: document.getElementById('cs-analogy').value.trim(),
-    problem: document.getElementById('cs-problem').value.trim(),
-    commands: document.getElementById('cs-commands').value.trim(),
-    scenario: document.getElementById('cs-scenario').value.trim(),
-    aws: document.getElementById('cs-aws').value.trim(),
-    azure: document.getElementById('cs-azure').value.trim(),
-    date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short' })
+// CHEAT SHEETS
+function saveCheatSheet(){
+  const topic=document.getElementById('cs-topic').value.trim();
+  if(!topic){toast('Enter topic name');return;}
+  state.cheatsheets.push({id:Date.now(),topic,
+    analogy:document.getElementById('cs-analogy').value.trim(),
+    problem:document.getElementById('cs-problem').value.trim(),
+    commands:document.getElementById('cs-commands').value.trim(),
+    scenario:document.getElementById('cs-scenario').value.trim(),
+    aws:document.getElementById('cs-aws').value.trim(),
+    azure:document.getElementById('cs-azure').value.trim(),
+    date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'})
   });
   scheduleSave();
-  ['cs-topic','cs-analogy','cs-problem','cs-commands','cs-scenario','cs-aws','cs-azure'].forEach(id => document.getElementById(id).value = '');
-  switchTab('cs','view');
-  toast('Cheat sheet saved!');
+  ['cs-topic','cs-analogy','cs-problem','cs-commands','cs-scenario','cs-aws','cs-azure'].forEach(id=>document.getElementById(id).value='');
+  switchTab('cs','view');toast('Cheat sheet saved!');
 }
 
-function renderCheatSheets() {
-  const el = document.getElementById('cs-list');
-  if (!state.cheatsheets.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">◷</div><div class="empty-text">No cheat sheets yet.</div></div>'; return; }
-  el.innerHTML = [...state.cheatsheets].reverse().map(s => `
+function renderCheatSheets(){
+  const el=document.getElementById('cs-list');
+  if(!state.cheatsheets.length){el.innerHTML='<div class="empty"><div class="empty-icon">◷</div><div class="empty-text">No cheat sheets yet.</div></div>';return;}
+  el.innerHTML=[...state.cheatsheets].reverse().map(s=>`
     <div class="cheat-card">
-      <div class="cheat-title">${s.topic} <span style="font-size:11px;color:var(--muted);font-weight:400">${s.date}</span></div>
-      ${s.analogy ? `<div class="cheat-analogy">// ${s.analogy}</div>` : ''}
-      ${s.problem ? `<div class="cheat-field"><div class="cheat-field-label">Problem it solves</div><div class="cheat-field-val">${s.problem}</div></div>` : ''}
-      ${s.commands ? `<div class="cheat-field"><div class="cheat-field-label">Key commands</div><div class="cheat-cmds">${s.commands}</div></div>` : ''}
-      ${s.scenario ? `<div class="cheat-field"><div class="cheat-field-label">Real job scenario</div><div class="cheat-field-val">${s.scenario}</div></div>` : ''}
-      ${(s.aws||s.azure) ? `<div class="cheat-field"><div class="cheat-field-label">Cloud equivalents</div><div class="cheat-field-val" style="font-size:12px">AWS: ${s.aws||'—'} &nbsp;|&nbsp; Azure/GCP: ${s.azure||'—'}</div></div>` : ''}
-      <div style="margin-top:10px"><button class="btn btn-sm btn-danger" onclick="deleteCS(${s.id})">Delete</button></div>
+      <div class="cheat-title">${s.topic}<span style="font-size:11px;color:var(--muted);font-weight:400">${s.date}</span></div>
+      ${s.analogy?`<div class="cheat-analogy">// ${s.analogy}</div>`:''}
+      ${s.problem?`<div class="cheat-field"><div class="cheat-field-label">Problem it solves</div><div class="cheat-field-val">${s.problem}</div></div>`:''}
+      ${s.commands?`<div class="cheat-field"><div class="cheat-field-label">Key commands</div><div class="cheat-cmds">${escHtml(s.commands)}</div></div>`:''}
+      ${s.scenario?`<div class="cheat-field"><div class="cheat-field-label">Real job scenario</div><div class="cheat-field-val">${s.scenario}</div></div>`:''}
+      ${(s.aws||s.azure)?`<div class="cheat-field"><div class="cheat-field-label">Cloud equivalents</div><div class="cheat-field-val" style="font-size:12px">AWS: ${s.aws||'—'} &nbsp;|&nbsp; Azure/GCP: ${s.azure||'—'}</div></div>`:''}
+      <div style="margin-top:10px"><button class="btn btn-sm btn-danger" onclick="deleteCS(${s.id})">🗑 Delete</button></div>
     </div>`).join('');
 }
 
-function deleteCS(id) { state.cheatsheets = state.cheatsheets.filter(s => s.id !== id); scheduleSave(); renderCheatSheets(); }
+function deleteCS(id){state.cheatsheets=state.cheatsheets.filter(s=>s.id!==id);scheduleSave();renderCheatSheets();}
 
-const BUILD_TARGETS = [
-  { week:'1–2', task:'Spin up a Linux VM on AWS/Azure free tier. SSH in. Break and fix networking.' },
-  { week:'3–4', task:'Containerize a simple Python or Node app with Docker.' },
-  { week:'5–6', task:'Write a Terraform config that provisions your VM automatically.' },
-  { week:'7–8', task:'Set up a CI/CD pipeline — GitHub Actions deploying to your VM.' },
-  { week:'9–10', task:'Deploy a Kubernetes pod locally with minikube. Break it and fix it.' },
-  { week:'11–12', task:'Connect one of your existing projects (CHC or healthcare app) to cloud infrastructure.' },
+// PORTFOLIO
+const BUILD_TARGETS=[
+  {week:'1–2',task:'Spin up a Linux VM on AWS/Azure free tier. SSH in. Break and fix networking.'},
+  {week:'3–4',task:'Containerize a simple Python or Node app with Docker.'},
+  {week:'5–6',task:'Write a Terraform config that provisions your VM automatically.'},
+  {week:'7–8',task:'Set up a CI/CD pipeline — GitHub Actions deploying to your VM.'},
+  {week:'9–10',task:'Deploy a Kubernetes pod locally with minikube. Break it and fix it.'},
+  {week:'11–12',task:'Connect one of your existing projects (CHC or healthcare app) to cloud infrastructure.'},
 ];
 
-function savePortfolio() {
-  const name = document.getElementById('pf-name').value.trim();
-  if (!name) { toast('Enter project name'); return; }
-  state.portfolio.push({
-    id: Date.now(), name,
-    week: document.getElementById('pf-week').value,
-    desc: document.getElementById('pf-desc').value.trim(),
-    link: document.getElementById('pf-link').value.trim(),
-    status: document.getElementById('pf-status').value,
-    date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'2-digit' })
+function savePortfolio(){
+  const name=document.getElementById('pf-name').value.trim();
+  if(!name){toast('Enter project name');return;}
+  state.portfolio.push({id:Date.now(),name,week:document.getElementById('pf-week').value,
+    desc:document.getElementById('pf-desc').value.trim(),link:document.getElementById('pf-link').value.trim(),
+    status:document.getElementById('pf-status').value,
+    date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'})
   });
-  scheduleSave();
-  ['pf-name','pf-week','pf-desc','pf-link'].forEach(id => document.getElementById(id).value = '');
-  renderPortfolio();
-  toast('Added to portfolio!');
+  scheduleSave();['pf-name','pf-week','pf-desc','pf-link'].forEach(id=>document.getElementById(id).value='');
+  renderPortfolio();toast('Added to portfolio!');
 }
 
-function renderPortfolio() {
-  const el = document.getElementById('portfolio-list');
-  el.innerHTML = state.portfolio.length ? [...state.portfolio].reverse().map(p => `
+function renderPortfolio(){
+  document.getElementById('portfolio-list').innerHTML=state.portfolio.length?[...state.portfolio].reverse().map(p=>`
     <div class="portfolio-card">
-      <div class="portfolio-title">${p.name} <span class="status-badge status-${p.status}">${p.status}</span></div>
-      <div class="portfolio-week">Week ${p.week} · ${p.date}</div>
-      <div class="portfolio-desc">${p.desc||''}</div>
-      ${p.link ? `<div style="margin-top:8px"><a href="${p.link}" style="font-size:12px;color:var(--accent)">${p.link}</a></div>` : ''}
-      <div style="margin-top:10px"><button class="btn btn-sm btn-danger" onclick="deletePF(${p.id})">Delete</button></div>
-    </div>`).join('') : '<div class="empty"><div class="empty-icon">◎</div><div class="empty-text">No projects yet.</div></div>';
-
-  document.getElementById('build-targets').innerHTML = BUILD_TARGETS.map(t => `
-    <div class="log-entry">
-      <div class="log-date font-mono" style="font-size:12px;color:var(--accent3)">Week ${t.week}</div>
-      <div class="log-content"><div class="portfolio-desc">${t.task}</div></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div style="font-size:14px;font-weight:600">${p.name} <span class="status-badge status-${p.status}">${p.status}</span></div>
+        <button class="btn btn-sm btn-danger" onclick="deletePF(${p.id})">🗑</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:8px">Week ${p.week} · ${p.date}</div>
+      <div style="font-size:13px;color:var(--muted)">${p.desc||''}</div>
+      ${p.link?`<div style="margin-top:8px"><a href="${p.link}" style="font-size:12px;color:var(--accent)">${p.link}</a></div>`:''}
+    </div>`).join(''):'<div class="empty"><div class="empty-icon">◎</div><div class="empty-text">No projects yet.</div></div>';
+  document.getElementById('build-targets').innerHTML=BUILD_TARGETS.map(t=>`
+    <div style="display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--accent3);min-width:60px;padding-top:1px">Week ${t.week}</div>
+      <div style="font-size:13px;color:var(--muted)">${t.task}</div>
     </div>`).join('');
 }
 
-function deletePF(id) { state.portfolio = state.portfolio.filter(p => p.id !== id); scheduleSave(); renderPortfolio(); }
+function deletePF(id){state.portfolio=state.portfolio.filter(p=>p.id!==id);scheduleSave();renderPortfolio();}
 
-const ROADMAP = [
-  { month:'Month 1 · Mar–Apr', focus:'Linux + Networking deep', outcome:'Can troubleshoot networking confidently. SSH, iptables, DNS, TCP — no hesitation.' },
-  { month:'Month 2 · Apr–May', focus:'Docker + containers', outcome:'One containerized app on GitHub. Can explain container lifecycle in an interview.' },
-  { month:'Month 3 · May–Jun', focus:'Kubernetes basics', outcome:'Can deploy and fix a K8s pod. Minikube running. Start applying for roles.' },
-  { month:'Month 4 · Jun–Jul', focus:'CI/CD + Terraform', outcome:'Automated deployment pipeline live. IaC-provisioned infrastructure on free tier.' },
-  { month:'Month 5 · Jul–Aug', focus:'Cloud provider deep (AWS or Azure)', outcome:'Associate-level cert ready. VNet, IAM, storage, compute — solid.' },
-  { month:'Month 6 · Aug–Sep', focus:'Integration + job push', outcome:'Portfolio complete. Active interviewing. Target: first offer or advanced rounds.' },
+// ROADMAP
+const ROADMAP=[
+  {month:'Month 1 · Mar–Apr',focus:'Linux + Networking deep',outcome:'Can troubleshoot networking confidently. SSH, iptables, DNS, TCP — no hesitation.'},
+  {month:'Month 2 · Apr–May',focus:'Docker + containers',outcome:'One containerized app on GitHub. Can explain container lifecycle in an interview.'},
+  {month:'Month 3 · May–Jun',focus:'Kubernetes basics',outcome:'Can deploy and fix a K8s pod. Minikube running. Start applying for roles.'},
+  {month:'Month 4 · Jun–Jul',focus:'CI/CD + Terraform',outcome:'Automated deployment pipeline live. IaC-provisioned infrastructure on free tier.'},
+  {month:'Month 5 · Jul–Aug',focus:'Cloud provider deep (AWS or Azure)',outcome:'Associate-level cert ready. VNet, IAM, storage, compute — solid.'},
+  {month:'Month 6 · Aug–Sep',focus:'Integration + job push',outcome:'Portfolio complete. Active interviewing. Target: first offer or advanced rounds.'},
 ];
 
-function renderRoadmap() {
-  const currentMonth = new Date().getMonth();
-  document.getElementById('roadmap-items').innerHTML = ROADMAP.map((m, i) => {
-    const mi = 2 + i;
-    return `<div class="milestone">
-      <div class="milestone-dot ${currentMonth > mi ? 'done' : currentMonth === mi ? 'active' : ''}">M${i+1}</div>
+function renderRoadmap(){
+  const cm=new Date().getMonth();
+  document.getElementById('roadmap-items').innerHTML=ROADMAP.map((m,i)=>{
+    const mi=2+i;
+    return`<div class="milestone">
+      <div class="milestone-dot ${cm>mi?'done':cm===mi?'active':''}">M${i+1}</div>
       <div class="milestone-content">
         <div class="milestone-month">${m.month}</div>
         <div class="milestone-focus">${m.focus}</div>
@@ -790,71 +832,85 @@ function renderRoadmap() {
   }).join('');
 }
 
-const CQ = ['Hit 12 hrs of core learning this week?','Built or broke one real thing?','Made at least 5 quality job applications?','Created at least one cheat sheet?'];
-let checkState = [false,false,false,false];
+// CHECKPOINT
+const CQ=[
+  'Hit 12 hrs of core learning this week?',
+  'Built or broke one real thing?',
+  'Made at least 5 quality job applications?',
+  'Created at least one cheat sheet?'
+];
 
-function renderCheckpoint() {
-  document.getElementById('checkpoint-items').innerHTML = CQ.map((q,i) => `
-    <div class="checkpoint-q" onclick="toggleCheck(${i})">
-      <div class="check-box ${checkState[i]?'checked':''}" id="chk-${i}"></div>
-      <div>${q}</div>
+function renderCheckpoint(){
+  document.getElementById('checkpoint-items').innerHTML=CQ.map((q,i)=>`
+    <div class="checkpoint-q ${checkState[i]?'checked':''}" onclick="toggleCheck(${i})">
+      <div class="check-circle ${checkState[i]?'checked':''}" id="chk-${i}">${checkState[i]?'✓':''}</div>
+      <div class="checkpoint-q-text">${q}</div>
     </div>`).join('');
   updateCheckScore();
   renderCheckHistory();
 }
 
-function toggleCheck(i) {
-  checkState[i] = !checkState[i];
-  document.getElementById('chk-'+i).className = 'check-box' + (checkState[i]?' checked':'');
+function toggleCheck(i){
+  checkState[i]=!checkState[i];
+  document.querySelectorAll('.checkpoint-q')[i].className='checkpoint-q'+(checkState[i]?' checked':'');
+  const cb=document.getElementById('chk-'+i);
+  cb.className='check-circle'+(checkState[i]?' checked':'');
+  cb.textContent=checkState[i]?'✓':'';
   updateCheckScore();
 }
 
-function updateCheckScore() {
-  const c = checkState.filter(Boolean).length;
-  const el = document.getElementById('checkpoint-score');
-  el.textContent = `${c}/4 complete`;
-  el.style.color = c===4?'var(--success)':c>=2?'var(--accent3)':'var(--muted)';
+function updateCheckScore(){
+  const c=checkState.filter(Boolean).length;
+  document.getElementById('score-num').textContent=c;
+  const colors=['var(--danger)','var(--danger)','var(--accent3)','var(--accent3)','var(--success)'];
+  const labels=['Not started','Keep going','Halfway there','Almost there','Perfect week!'];
+  const circle=document.getElementById('score-circle');
+  circle.style.border=`4px solid ${colors[c]}`;
+  circle.style.boxShadow=`0 0 20px ${colors[c]}22`;
+  document.getElementById('score-num').style.color=colors[c];
+  document.getElementById('score-label').textContent=labels[c];
 }
 
-function saveCheckpoint() {
-  const c = checkState.filter(Boolean).length;
-  state.checkpoints.push({ id:Date.now(), week:getWeekLabel(), score:c, answers:[...checkState], date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}) });
-  checkState = [false,false,false,false];
-  scheduleSave();
-  renderCheckpoint();
+function saveCheckpoint(){
+  const c=checkState.filter(Boolean).length;
+  state.checkpoints.push({id:Date.now(),week:getWeekLabel(),score:c,answers:[...checkState],
+    date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'})});
+  checkState=[false,false,false,false];
+  scheduleSave();renderCheckpoint();
   toast(`${c}/4 — ${c===4?'Perfect week!':c>=2?'Good effort.':'Push harder next week.'}`);
 }
 
-function renderCheckHistory() {
-  const el = document.getElementById('checkpoint-history');
-  if (!state.checkpoints.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">◻</div><div class="empty-text">No checkpoints yet.</div></div>'; return; }
-  el.innerHTML = [...state.checkpoints].reverse().map(c => {
-    const color = c.score===4?'var(--success)':c.score>=2?'var(--accent3)':'var(--danger)';
-    return `<div class="log-entry">
-      <div class="log-date font-mono" style="font-size:12px">${c.date}</div>
-      <div class="log-content">
-        <div class="log-topic">${c.week}</div>
-        <div class="log-meta" style="color:${color};font-weight:600">${c.score}/4 questions hit</div>
-        <div class="log-notes">${CQ.map((q,i)=>`${c.answers[i]?'✓':'✗'} ${q}`).join(' · ')}</div>
-      </div>
-    </div>`;
-  }).join('');
+function renderCheckHistory(){
+  const el=document.getElementById('checkpoint-history');
+  if(!state.checkpoints.length){el.innerHTML='<div class="empty"><div class="empty-icon">◻</div><div class="empty-text">No checkpoints yet.</div></div>';return;}
+  const recent=[...state.checkpoints].reverse().slice(0,8);
+  const colors=['var(--danger)','var(--danger)','var(--accent3)','var(--accent3)','var(--success)'];
+  el.innerHTML=`<div class="history-grid">`+recent.map(c=>`
+    <div class="history-row">
+      <div class="history-week">${c.date}</div>
+      <div class="history-bars">${CQ.map((_,i)=>`<div class="history-bar ${c.answers[i]?'hit':'miss'}" title="${CQ[i]}">${i+1}</div>`).join('')}</div>
+      <div class="history-score" style="color:${colors[c.score]}">${c.score}/4</div>
+    </div>`).join('')+`</div>`;
+  renderTrend();
 }
 
-function toast(msg, type) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast' + (type?' '+type:'');
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3000);
+function renderTrend(){
+  const el=document.getElementById('trend-line');
+  if(!state.checkpoints.length){el.innerHTML='';return;}
+  const recent=[...state.checkpoints].slice(-8);
+  const colors=['#f87171','#f87171','#f59e0b','#f59e0b','#34d399'];
+  el.innerHTML=recent.map(c=>`<div class="trend-bar" style="height:${(c.score/4)*36+4}px;background:${colors[c.score]};opacity:0.7" title="${c.week}: ${c.score}/4"></div>`).join('');
 }
 
-function renderAll() {
-  renderDashboard();
-  renderLog();
-  renderPortfolio();
-  renderRoadmap();
-  renderCheckpoint();
+// TOAST
+function toast(msg,type){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast'+(type?' t'+type:'');
+  el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+function renderAll(){
+  renderDashboard();renderLogList();renderPortfolio();renderRoadmap();renderCheckpoint();
 }
 
 loadFromCloud();
