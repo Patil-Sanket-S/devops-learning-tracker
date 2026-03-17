@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanket's 5-Month Master Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0e14;--surface:#13161f;--surface2:#181c28;--surface3:#1e2235;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#e4e8f0;--muted:#6b7394;--muted2:#4a5070;
+  --gold:#f0b429;--teal:#2dd4bf;--rose:#fb7185;--violet:#a78bfa;--sky:#38bdf8;--green:#4ade80;
+  --mono:'JetBrains Mono',monospace;--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(167,139,250,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:24px;opacity:0.8}
+.hero-title{font-family:var(--serif);font-size:clamp(40px,7vw,72px);font-weight:700;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,#e4e8f0 0%,#a78bfa 60%,#2dd4bf 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:var(--muted);max-width:540px;margin:0 auto 48px;line-height:1.6}
+.hero-deadline{display:inline-flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:100px;padding:12px 28px;font-family:var(--mono);font-size:13px}
+.hero-deadline-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse2 2s infinite}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.8)}}
+.hero-stats{display:flex;gap:40px;margin-top:60px;flex-wrap:wrap;justify-content:center}
+.hero-stat{text-align:center}
+.hero-stat-num{font-family:var(--serif);font-size:36px;font-weight:700;color:var(--gold)}
+.hero-stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+/* SECTIONS */
+.section{max-width:860px;margin:0 auto;padding:80px 24px}
+.section-label{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.section-title{font-family:var(--serif);font-size:clamp(28px,4vw,40px);font-weight:700;line-height:1.2;margin-bottom:24px}
+.section-body{color:var(--muted);font-size:15px;line-height:1.8;max-width:680px}
+
+/* DIVIDER */
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0}
+
+/* SCIENCE CARDS */
+.science-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:32px}
+.science-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden}
+.science-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.science-card.gold::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.science-card.teal::before{background:linear-gradient(90deg,var(--teal),transparent)}
+.science-card.rose::before{background:linear-gradient(90deg,var(--rose),transparent)}
+.science-card.violet::before{background:linear-gradient(90deg,var(--violet),transparent)}
+.science-card.sky::before{background:linear-gradient(90deg,var(--sky),transparent)}
+.science-card.green::before{background:linear-gradient(90deg,var(--green),transparent)}
+.science-card-icon{font-size:28px;margin-bottom:12px}
+.science-card-title{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.science-card-body{font-size:13px;color:var(--muted);line-height:1.6}
+.science-card-source{font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:10px;letter-spacing:0.5px}
+
+/* DAILY SCHEDULE */
+.schedule-wrap{margin-top:32px}
+.day-type{margin-bottom:32px}
+.day-type-label{font-family:var(--mono);font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.day-type-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:var(--border2)}
+.timeline-item{position:relative;margin-bottom:20px}
+.timeline-item::before{content:'';position:absolute;left:-20px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--surface3);border:2px solid var(--border2)}
+.timeline-item.peak::before{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(240,180,41,0.4)}
+.timeline-item.build::before{background:var(--teal);border-color:var(--teal)}
+.timeline-item.rest::before{background:var(--violet);border-color:var(--violet)}
+.timeline-item.light::before{background:var(--sky);border-color:var(--sky)}
+.timeline-time{font-family:var(--mono);font-size:11px;color:var(--muted2);margin-bottom:3px}
+.timeline-activity{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.timeline-note{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* WEEKLY RHYTHM */
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:32px}
+.week-day{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 10px;text-align:center}
+.week-day-name{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.week-day-type{font-size:12px;font-weight:600;margin-bottom:6px}
+.week-day-hrs{font-family:var(--mono);font-size:18px;font-weight:700;margin-bottom:4px}
+.week-day-label{font-size:10px;color:var(--muted)}
+.week-day.full{border-top:2px solid var(--gold)}
+.week-day.build-day{border-top:2px solid var(--teal)}
+.week-day.review{border-top:2px solid var(--violet)}
+.week-day.rest-day{border-top:2px solid var(--muted2);opacity:0.7}
+
+/* MONTH PLAN */
+.month-grid{display:flex;flex-direction:column;gap:16px;margin-top:32px}
+.month-row{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;display:grid;grid-template-columns:120px 1fr auto;gap:24px;align-items:center}
+.month-num{font-family:var(--serif);font-size:48px;font-weight:700;line-height:1;opacity:0.2}
+.month-content{}
+.month-label{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.month-title{font-size:16px;font-weight:600;margin-bottom:6px}
+.month-courses{font-size:12px;color:var(--muted);line-height:1.6}
+.month-milestone{text-align:right}
+.milestone-tag{display:inline-block;padding:6px 14px;border-radius:100px;font-size:11px;font-weight:600;font-family:var(--mono)}
+.m1{border-top:2px solid var(--sky)}
+.m2{border-top:2px solid var(--teal)}
+.m3{border-top:2px solid var(--gold)}
+.m4{border-top:2px solid var(--rose)}
+.m5{border-top:2px solid var(--green)}
+
+/* BURNOUT PREVENTION */
+.burnout-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.burnout-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px}
+.burnout-card-title{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.burnout-rule{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;font-size:13px;color:var(--muted);line-height:1.5}
+.burnout-rule-num{font-family:var(--mono);font-size:11px;color:var(--teal);min-width:20px;margin-top:2px;font-weight:600}
+
+/* IDENTITY */
+.identity-block{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;text-align:center;margin-top:32px;position:relative;overflow:hidden}
+.identity-block::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 100%,rgba(167,139,250,0.06) 0%,transparent 70%)}
+.identity-quote{font-family:var(--serif);font-size:clamp(20px,3vw,28px);font-weight:300;font-style:italic;line-height:1.5;margin-bottom:16px;color:var(--text)}
+.identity-source{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px}
+
+/* REWARD SYSTEM */
+.reward-tiers{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+.reward-tier{display:flex;align-items:center;gap:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 24px}
+.reward-icon{font-size:28px;min-width:44px;text-align:center}
+.reward-trigger{font-size:13px;font-weight:500;flex:1}
+.reward-trigger-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.reward-label{font-family:var(--mono);font-size:11px;padding:4px 12px;border-radius:100px;font-weight:600}
+
+/* RULES */
+.rules-list{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+.rule-item{display:flex;gap:16px;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;align-items:flex-start}
+.rule-num{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--border2);min-width:32px;line-height:1.2}
+.rule-text{font-size:14px;line-height:1.6;color:var(--text)}
+.rule-text strong{color:var(--gold)}
+
+/* FOOTER */
+.footer{text-align:center;padding:60px 24px;border-top:1px solid var(--border)}
+.footer-title{font-family:var(--serif);font-size:28px;font-weight:700;margin-bottom:8px}
+.footer-sub{font-size:14px;color:var(--muted)}
+
+@media(max-width:600px){
+  .week-grid{grid-template-columns:repeat(4,1fr)}.week-day:nth-child(n+5){display:none}
+  .month-row{grid-template-columns:60px 1fr}.month-milestone{display:none}
+  .burnout-grid{grid-template-columns:1fr}
+  .science-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">The Master Plan · March 2026</div>
+  <h1 class="hero-title">5 Months.<br>Two Paths.<br>One Goal.</h1>
+  <p class="hero-sub">A science-backed, burnout-proof plan to complete the KodeKloud DevOps and Cloud Engineer learning paths — without losing your mind.</p>
+  <div class="hero-deadline">
+    <div class="hero-deadline-dot"></div>
+    <span>Target: <strong>August 17, 2026</strong> · 153 days from today</span>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">38</div><div class="hero-stat-label">Courses</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">~280</div><div class="hero-stat-label">Hours of content</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">25</div><div class="hero-stat-label">Hrs / week</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">1.5</div><div class="hero-stat-label">Courses / week</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- THE SCIENCE -->
+<div class="section">
+  <div class="section-label">The Science</div>
+  <h2 class="section-title">Why most plans fail — and why this one won't</h2>
+  <p class="section-body">Every principle in this plan is grounded in research on learning, habit formation, and cognitive endurance. Not motivation. Not willpower. Systems.</p>
+  <div class="science-grid">
+    <div class="science-card gold">
+      <div class="science-card-icon">🧠</div>
+      <div class="science-card-title">Spaced Repetition</div>
+      <div class="science-card-body">Re-encountering material at increasing intervals is 2-3x more effective than re-reading. Every week includes a review session for the previous week's topics — not optional.</div>
+      <div class="science-card-source">Ebbinghaus, 1885 · Cepeda et al., 2006</div>
+    </div>
+    <div class="science-card teal">
+      <div class="science-card-icon">⚡</div>
+      <div class="science-card-title">Ultradian Rhythms</div>
+      <div class="science-card-body">The brain operates in 90-minute focus cycles followed by a 20-minute rest need. Fighting this is why you feel mentally drained after 2 hours. This plan works with it — not against it.</div>
+      <div class="science-card-source">Kleitman, 1963 · Huberman, 2021</div>
+    </div>
+    <div class="science-card rose">
+      <div class="science-card-icon">🔗</div>
+      <div class="science-card-title">Habit Stacking</div>
+      <div class="science-card-body">Attaching new habits to existing ones eliminates the willpower cost of starting. Your morning green tea + reading is already a stack. Study follows the same trigger pattern.</div>
+      <div class="science-card-source">Clear, Atomic Habits, 2018</div>
+    </div>
+    <div class="science-card violet">
+      <div class="science-card-icon">🎯</div>
+      <div class="science-card-title">Identity-Based Habits</div>
+      <div class="science-card-body">"I am a cloud engineer who studies daily" is more durable than "I want a cloud job." Every log entry, every lab, every cheat sheet is casting a vote for who you are becoming.</div>
+      <div class="science-card-source">Clear, Atomic Habits, 2018</div>
+    </div>
+    <div class="science-card sky">
+      <div class="science-card-icon">💤</div>
+      <div class="science-card-title">Sleep Consolidation</div>
+      <div class="science-card-body">Technical skills learned before sleep consolidate during REM. Your evening study window (7–10pm) is scientifically optimal — the brain processes and files it overnight.</div>
+      <div class="science-card-source">Walker, Why We Sleep, 2017</div>
+    </div>
+    <div class="science-card green">
+      <div class="science-card-icon">🔄</div>
+      <div class="science-card-title">Interleaved Practice</div>
+      <div class="science-card-body">Mixing topics (theory + lab + a previous topic) outperforms blocked practice by 43% on retention tests. This is why Build/Break sessions use a different topic than the morning lesson.</div>
+      <div class="science-card-source">Rohrer & Taylor, 2007</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- DAILY SCHEDULE -->
+<div class="section">
+  <div class="section-label">Daily Structure</div>
+  <h2 class="section-title">Your day, designed around your brain</h2>
+  <p class="section-body">Based on your peak windows (10am–12pm and 7–10pm) and your natural rhythm with both Pomodoro and long blocks — here's how a day is structured.</p>
+
+  <div class="schedule-wrap">
+    <div class="day-type">
+      <div class="day-type-label">⚡ Full Study Day (Mon / Wed / Fri)</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">7:00 – 7:45am</div>
+          <div class="timeline-activity">☕ Morning ritual — green tea + 10 pages</div>
+          <div class="timeline-note">Non-negotiable. Already built. Don't touch it.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">8:00 – 9:00am</div>
+          <div class="timeline-activity">🐾 Walk Enzo + light movement</div>
+          <div class="timeline-note">Physical activity before deep work increases BDNF — literally grows neurons. Don't skip this.</div>
+        </div>
+        <div class="timeline-item peak">
+          <div class="timeline-time">10:00am – 12:00pm · PEAK WINDOW 🔥</div>
+          <div class="timeline-activity">🧠 Core Learning — KodeKloud video + notes</div>
+          <div class="timeline-note">Two 45-min Pomodoro blocks with a 10-min break. One full topic or module. No phone. No interruptions. This is your sacred window.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">12:00 – 2:00pm</div>
+          <div class="timeline-activity">🍽 Lunch + rest — no screens if possible</div>
+          <div class="timeline-note">Let the morning's content consolidate. Walk, eat, rest. This is not wasted time — it's recovery.</div>
+        </div>
+        <div class="timeline-item build">
+          <div class="timeline-time">2:00 – 4:00pm</div>
+          <div class="timeline-activity">🔨 Build / Break lab — hands on</div>
+          <div class="timeline-note">Take what you learned in the morning and break it. Deploy it. Misconfigure it. Fix it. This is where theory becomes skill.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">4:00 – 6:30pm</div>
+          <div class="timeline-activity">🏗 Life — construction, Enzo, admin</div>
+          <div class="timeline-note">Handle everything else here. This is your buffer. Guard the windows before and after it.</div>
+        </div>
+        <div class="timeline-item peak">
+          <div class="timeline-time">7:00 – 9:30pm · PEAK WINDOW 🔥</div>
+          <div class="timeline-activity">📋 Retention + cheat sheet + Anki</div>
+          <div class="timeline-note">Review today's topic. Write the teach-it-back. Update cheat sheet. 15 min Anki. Sleep consolidates this — it's the most efficient study of the day.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">9:30pm onwards</div>
+          <div class="timeline-activity">📚 Read Atomic Habits or related book</div>
+          <div class="timeline-note">Wind down with reading. No screens after 10pm — protect sleep quality, which directly protects learning.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-type">
+      <div class="day-type-label">💼 Job Hunt Day (Tue / Thu)</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">7:00 – 8:30am</div>
+          <div class="timeline-activity">☕ Morning ritual + Enzo walk</div>
+          <div class="timeline-note">Same anchor. Same start. Identity consistency matters.</div>
+        </div>
+        <div class="timeline-item peak">
+          <div class="timeline-time">10:00am – 12:00pm</div>
+          <div class="timeline-activity">🧠 1 hour core learning + 1 hour job applications</div>
+          <div class="timeline-note">Don't abandon study entirely. One focused hour keeps the learning momentum. One hour of quality applications (5–8, not 20 spray-and-pray).</div>
+        </div>
+        <div class="timeline-item build">
+          <div class="timeline-time">2:00 – 4:00pm</div>
+          <div class="timeline-activity">💼 LinkedIn + networking + interview prep</div>
+          <div class="timeline-note">One LinkedIn post per week sharing something you learned. Builds your public proof of work. Recruiters notice consistency over time.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">7:00 – 9:00pm</div>
+          <div class="timeline-activity">📋 Spaced review of previous topics</div>
+          <div class="timeline-note">Revisit a topic from 7–14 days ago. This is the forgetting curve hack — this session saves all the previous week's work from decay.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-type">
+      <div class="day-type-label">🌿 Active Rest Day (Saturday OR Sunday — pick one)</div>
+      <div class="timeline">
+        <div class="timeline-item rest">
+          <div class="timeline-time">Morning</div>
+          <div class="timeline-activity">📚 Extended reading — no time limit</div>
+          <div class="timeline-note">Atomic Habits, a tech biography, anything that feeds your mind without demanding output. This is pleasure reading not study.</div>
+        </div>
+        <div class="timeline-item rest">
+          <div class="timeline-time">Afternoon</div>
+          <div class="timeline-activity">🐾 Long walk with Enzo + farm visit</div>
+          <div class="timeline-note">Physical environment change resets the nervous system. The farm has been a source of stress — reclaim it as a recharge spot.</div>
+        </div>
+        <div class="timeline-item rest">
+          <div class="timeline-time">Evening</div>
+          <div class="timeline-activity">🎮 Guilt-free leisure</div>
+          <div class="timeline-note">Watch something. Cook something. Do nothing. Rest is not the enemy of progress — it IS part of the system. Chronic underrecovery is why people quit at month 3.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-type">
+      <div class="day-type-label">⚡ The Other Weekend Day (Longer Study Session)</div>
+      <div class="timeline">
+        <div class="timeline-item peak">
+          <div class="timeline-time">10:00am – 1:00pm</div>
+          <div class="timeline-activity">🧠 Deep work block — finish or start a full course module</div>
+          <div class="timeline-note">3-hour long block. No Pomodoro today — go into flow state. This is where you catch up if the week was below quota.</div>
+        </div>
+        <div class="timeline-item build">
+          <div class="timeline-time">3:00 – 5:00pm</div>
+          <div class="timeline-activity">🔨 Weekly portfolio project progress</div>
+          <div class="timeline-note">The one real thing you're building this week. GitHub commit before dinner — non-negotiable.</div>
+        </div>
+        <div class="timeline-item light">
+          <div class="timeline-time">7:00 – 8:30pm</div>
+          <div class="timeline-activity">◻ Weekly checkpoint + next week planning</div>
+          <div class="timeline-note">Open the tracker. Run the checkpoint. Look at the roadmap pace indicator. Plan the coming week's focus topics. 90 minutes max.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WEEKLY RHYTHM -->
+<div class="section">
+  <div class="section-label">Weekly Rhythm</div>
+  <h2 class="section-title">The 7-day blueprint</h2>
+  <p class="section-body">Every week follows the same skeleton. Predictability reduces decision fatigue — you never have to think "what should I do today?"</p>
+  <div class="week-grid">
+    <div class="week-day full">
+      <div class="week-day-name">Mon</div>
+      <div class="week-day-type" style="color:var(--gold)">Deep Study</div>
+      <div class="week-day-hrs" style="color:var(--gold)">5h</div>
+      <div class="week-day-label">New topic</div>
+    </div>
+    <div class="week-day build-day">
+      <div class="week-day-name">Tue</div>
+      <div class="week-day-type" style="color:var(--teal)">Job Hunt</div>
+      <div class="week-day-hrs" style="color:var(--teal)">3h</div>
+      <div class="week-day-label">Apps + review</div>
+    </div>
+    <div class="week-day full">
+      <div class="week-day-name">Wed</div>
+      <div class="week-day-type" style="color:var(--gold)">Deep Study</div>
+      <div class="week-day-hrs" style="color:var(--gold)">5h</div>
+      <div class="week-day-label">Continue / lab</div>
+    </div>
+    <div class="week-day build-day">
+      <div class="week-day-name">Thu</div>
+      <div class="week-day-type" style="color:var(--teal)">Job Hunt</div>
+      <div class="week-day-hrs" style="color:var(--teal)">3h</div>
+      <div class="week-day-label">Interview prep</div>
+    </div>
+    <div class="week-day full">
+      <div class="week-day-name">Fri</div>
+      <div class="week-day-type" style="color:var(--gold)">Deep Study</div>
+      <div class="week-day-hrs" style="color:var(--gold)">5h</div>
+      <div class="week-day-label">Finish topic</div>
+    </div>
+    <div class="week-day review">
+      <div class="week-day-name">Sat</div>
+      <div class="week-day-type" style="color:var(--violet)">Long Block</div>
+      <div class="week-day-hrs" style="color:var(--violet)">5h</div>
+      <div class="week-day-label">Project + review</div>
+    </div>
+    <div class="week-day rest-day">
+      <div class="week-day-name">Sun</div>
+      <div class="week-day-type" style="color:var(--muted)">Rest</div>
+      <div class="week-day-hrs" style="color:var(--muted)">1h</div>
+      <div class="week-day-label">Checkpoint only</div>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;font-family:var(--mono)">Total: ~27 hrs/week · Flexible — swap days freely, hit the weekly targets</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- 5 MONTH ROADMAP -->
+<div class="section">
+  <div class="section-label">Month by Month</div>
+  <h2 class="section-title">What you're learning and when</h2>
+  <p class="section-body">Each month has a primary focus that matches the KodeKloud curriculum sequence. The pace is 1.5 courses per week on average.</p>
+  <div class="month-grid">
+    <div class="month-row m1">
+      <div class="month-num" style="color:var(--sky)">01</div>
+      <div class="month-content">
+        <div class="month-label">March 17 – April 17</div>
+        <div class="month-title">Foundations — Linux, Shell, Git, DevOps basics</div>
+        <div class="month-courses">DevOps Prereq · Fundamentals of DevOps · Linux for Beginners · Shell Scripts · Git for Beginners · 12 Factor App</div>
+      </div>
+      <div class="month-milestone"><span class="milestone-tag" style="background:rgba(56,189,248,0.1);color:var(--sky)">CLI confident</span></div>
+    </div>
+    <div class="month-row m2">
+      <div class="month-num" style="color:var(--teal)">02</div>
+      <div class="month-content">
+        <div class="month-label">April 18 – May 17</div>
+        <div class="month-title">Containers — Docker, Kubernetes, CI/CD, Python</div>
+        <div class="month-courses">Docker for Beginners · Kubernetes for Beginners · Jenkins · Python Basics · AWS Cloud Practitioner · GCP Digital Leader</div>
+      </div>
+      <div class="month-milestone"><span class="milestone-tag" style="background:rgba(45,212,191,0.1);color:var(--teal)">First container deployed</span></div>
+    </div>
+    <div class="month-row m3">
+      <div class="month-num" style="color:var(--gold)">03</div>
+      <div class="month-content">
+        <div class="month-label">May 18 – June 17</div>
+        <div class="month-title">Cloud Basics — Azure, IaC, Terraform deep</div>
+        <div class="month-courses">AZ-900 · AZ-104 · DP-900 · Terraform for Beginners (DevOps) · AWS EKS · Azure Kubernetes Service</div>
+      </div>
+      <div class="month-milestone"><span class="milestone-tag" style="background:rgba(240,180,41,0.1);color:var(--gold)">AZ-900 ready</span></div>
+    </div>
+    <div class="month-row m4">
+      <div class="month-num" style="color:var(--rose)">04</div>
+      <div class="month-content">
+        <div class="month-label">June 18 – July 17</div>
+        <div class="month-title">AWS Deep + Advanced DevOps tooling</div>
+        <div class="month-courses">AWS S3 · EC2 · RDS · IAM · Lambda · CodePipeline · Helm · GitOps with ArgoCD · GKE · AWS ECS</div>
+      </div>
+      <div class="month-milestone"><span class="milestone-tag" style="background:rgba(251,113,133,0.1);color:var(--rose)">AWS core solid</span></div>
+    </div>
+    <div class="month-row m5">
+      <div class="month-num" style="color:var(--green)">05</div>
+      <div class="month-content">
+        <div class="month-label">July 18 – August 17</div>
+        <div class="month-title">Advanced — Istio, Prometheus, Architecture, Interview prep</div>
+        <div class="month-courses">Istio Service Mesh · Prometheus PCA · AZ-305 · AWS Solutions Architect · AZ-500 · DevOps Interview Prep</div>
+      </div>
+      <div class="month-milestone"><span class="milestone-tag" style="background:rgba(74,222,128,0.1);color:var(--green)">Interview ready</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- BURNOUT PREVENTION -->
+<div class="section">
+  <div class="section-label">Burnout Prevention</div>
+  <h2 class="section-title">The rules that keep you in the game</h2>
+  <p class="section-body">Burnout doesn't announce itself — it creeps in through missed rest, compounding guilt, and the slow erosion of motivation. These rules are non-negotiable.</p>
+  <div class="burnout-grid">
+    <div class="burnout-card">
+      <div class="burnout-card-title">🛑 The Hard Stops</div>
+      <div class="burnout-rule"><div class="burnout-rule-num">01</div><div>No studying after 10pm. Sleep quality directly determines learning quality next day. Protect it like a priority, not an afterthought.</div></div>
+      <div class="burnout-rule"><div class="burnout-rule-num">02</div><div>One full rest day per week is non-negotiable. Rest IS the plan — not a deviation from it. The brain builds connections during recovery.</div></div>
+      <div class="burnout-rule"><div class="burnout-rule-num">03</div><div>If you miss 2+ days: don't try to "catch up." Simply resume. Cramming 3 missed days into one session causes more damage than the missed days.</div></div>
+      <div class="burnout-rule"><div class="burnout-rule-num">04</div><div>When motivation drops, shrink the session. 30 minutes is infinitely better than zero. The "2-minute rule" — just open KodeKloud.</div></div>
+    </div>
+    <div class="burnout-card">
+      <div class="burnout-card-title">✅ The Green Lights</div>
+      <div class="burnout-rule"><div class="burnout-rule-num">01</div><div>Talk to me daily. Not about new projects — about what you studied. The teach-it-back session here is your accountability mechanism AND your retention tool.</div></div>
+      <div class="burnout-rule"><div class="burnout-rule-num">02</div><div>Celebrate course completions. Each one is a real milestone. Mark it in the tracker, screenshot the completion, post it on LinkedIn. External proof of work compounds.</div></div>
+      <div class="burnout-rule"><div class="burnout-rule-num">03</div><div>Allow interest detours — within guardrails. If a topic excites you more than the schedule says, spend one extra session. Not a week — one session. Then return.</div></div>
+      <div class="burnout-rule"><div class="burnout-rule-num">04</div><div>Enzo walks are not a distraction — they're a feature. Walking accelerates memory consolidation. Some of your best insights will come during those walks.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- REWARD SYSTEM -->
+<div class="section">
+  <div class="section-label">Reward System</div>
+  <h2 class="section-title">Earning your wins</h2>
+  <p class="section-body">Dopamine drives behavior. The brain needs to associate effort with reward — not just eventual outcome. These are your scheduled rewards at each milestone.</p>
+  <div class="reward-tiers">
+    <div class="reward-tier">
+      <div class="reward-icon">⚡</div>
+      <div>
+        <div class="reward-trigger">Complete any course</div>
+        <div class="reward-trigger-sub">Post the completion on LinkedIn. Screenshot it. Log it. Small but public.</div>
+      </div>
+      <span class="reward-label" style="background:rgba(56,189,248,0.1);color:var(--sky)">Every course</span>
+    </div>
+    <div class="reward-tier">
+      <div class="reward-icon">🎯</div>
+      <div>
+        <div class="reward-trigger">Complete Month 1 — Foundations</div>
+        <div class="reward-trigger-sub">Buy something small for yourself or Enzo. A treat that has nothing to do with tech.</div>
+      </div>
+      <span class="reward-label" style="background:rgba(45,212,191,0.1);color:var(--teal)">Month 1</span>
+    </div>
+    <div class="reward-tier">
+      <div class="reward-icon">🚀</div>
+      <div>
+        <div class="reward-trigger">Deploy first real project — Month 2</div>
+        <div class="reward-trigger-sub">A full day off. No tracker. No KodeKloud. Zero guilt. You earned it.</div>
+      </div>
+      <span class="reward-label" style="background:rgba(240,180,41,0.1);color:var(--gold)">Month 2</span>
+    </div>
+    <div class="reward-tier">
+      <div class="reward-icon">📜</div>
+      <div>
+        <div class="reward-trigger">Pass AZ-900 — Month 3</div>
+        <div class="reward-trigger-sub">First certification. Frame it. This is the first external validation of what you've built.</div>
+      </div>
+      <span class="reward-label" style="background:rgba(251,113,133,0.1);color:var(--rose)">Month 3</span>
+    </div>
+    <div class="reward-tier">
+      <div class="reward-icon">🏆</div>
+      <div>
+        <div class="reward-trigger">Complete both paths — August 17</div>
+        <div class="reward-trigger-sub">Plan something meaningful. A trip. A big purchase. Something you've been putting off. You will have earned it completely.</div>
+      </div>
+      <span class="reward-label" style="background:rgba(74,222,128,0.1);color:var(--green)">Month 5 · Final</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- THE IDENTITY SHIFT -->
+<div class="section">
+  <div class="section-label">The Identity Shift</div>
+  <h2 class="section-title">This is not about the certificate</h2>
+  <div class="identity-block">
+    <p class="identity-quote">"Every action you take is a vote for the type of person you wish to become."</p>
+    <div class="identity-source">James Clear · Atomic Habits</div>
+  </div>
+  <p class="section-body" style="margin-top:24px">The plan above will work — but only if you make one internal shift. Stop asking "how do I get a cloud job?" and start asking "what does a cloud engineer do every day?" Then do that thing. Every day. The job is a consequence of who you become, not the goal you chase.</p>
+  <p class="section-body" style="margin-top:16px">When you wake up tomorrow and open KodeKloud — that's not studying. That's <strong style="color:var(--text)">identity confirmation.</strong> You're not trying to become a cloud engineer. You already are one. You're just filling in the knowledge.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- THE NON-NEGOTIABLES -->
+<div class="section">
+  <div class="section-label">The 10 Laws</div>
+  <h2 class="section-title">Rules you don't negotiate with yourself</h2>
+  <div class="rules-list">
+    <div class="rule-item"><div class="rule-num">01</div><div class="rule-text"><strong>Never miss twice.</strong> One missed day is an accident. Two is a new habit. Three is a choice.</div></div>
+    <div class="rule-item"><div class="rule-num">02</div><div class="rule-text"><strong>Log before you sleep.</strong> If you studied, it gets logged. No exceptions. What gets measured gets managed.</div></div>
+    <div class="rule-item"><div class="rule-num">03</div><div class="rule-text"><strong>Labs are not optional.</strong> Watching a video without doing the lab is motion, not action. Every theory session gets a corresponding lab session.</div></div>
+    <div class="rule-item"><div class="rule-num">04</div><div class="rule-text"><strong>Teach it back or it didn't happen.</strong> If you can't explain the concept in your own words, you don't understand it yet. Write the teach-it-back before closing the tracker.</div></div>
+    <div class="rule-item"><div class="rule-num">05</div><div class="rule-text"><strong>Protect the 10am–12pm window.</strong> This is your highest cognitive output period. Guard it like a meeting with your future employer — because it is.</div></div>
+    <div class="rule-item"><div class="rule-num">06</div><div class="rule-text"><strong>One new project idea per week maximum.</strong> Write it down. Add it to a parking lot list. Don't start it. Ideas are cheap. Execution is rare.</div></div>
+    <div class="rule-item"><div class="rule-num">07</div><div class="rule-text"><strong>The roadmap pace indicator is your honest friend.</strong> When it says "behind" — don't dismiss it. Add one extra session that week. When it says "ahead" — don't coast. Protect the lead.</div></div>
+    <div class="rule-item"><div class="rule-num">08</div><div class="rule-text"><strong>Sleep is sacred.</strong> 7–8 hours minimum. Sleep deprivation reduces learning retention by up to 40%. No late-night study sessions are worth that trade.</div></div>
+    <div class="rule-item"><div class="rule-num">09</div><div class="rule-text"><strong>Apply for jobs from Month 3.</strong> Don't wait until you feel "ready." You never will. Send applications from month 3 — the process teaches you what to study next.</div></div>
+    <div class="rule-item"><div class="rule-num">10</div><div class="rule-text"><strong>Mechatronics in September.</strong> If the interest is still alive after you complete the paths, explore it then. If it's gone — it was an escape hatch, not a passion.</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-title">March 17 → August 17, 2026</div>
+  <div class="footer-sub" style="margin-top:8px;color:var(--muted)">153 days · 38 courses · 1 goal · 0 excuses</div>
+  <div style="margin-top:24px;font-family:var(--mono);font-size:11px;color:var(--muted2)">Sanket Patil · DevOps & Cloud Engineer Learning OS · v5</div>
+</div>
+
+</body>
+</html>
