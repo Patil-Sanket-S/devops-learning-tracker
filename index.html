@@ -991,41 +991,33 @@ function getMonthRate(hid){
 }
 
 function buildStreaksRow(hid,color){
-  // Show last 28 days as circles (4 weeks)
   const today=new Date();today.setHours(0,0,0,0);
   const todayStr=dateKey(today);
   const days=[];
-  for(let i=27;i>=0;i--){
-    const d=new Date(today);d.setDate(today.getDate()-i);
-    days.push(d);
-  }
+  for(let i=27;i>=0;i--){const d=new Date(today);d.setDate(today.getDate()-i);days.push(d);}
   const dayLabels=['M','T','W','T','F','S','S'];
-  return`<div>
-    <div style="display:flex;gap:4px;margin-bottom:6px;overflow-x:auto;padding-bottom:2px">
-      ${days.map(d=>{
-        const k=dateKey(d);
-        const done=state.habitLog[k]&&state.habitLog[k][hid];
-        const isToday=k===todayStr;
-        const isFuture=k>todayStr;
-        const dayNum=d.getDate();
-        const dayLabel=dayLabels[d.getDay()===0?6:d.getDay()-1];
-        const bg=done?color+'33':'var(--surface3)';
-        const checkmark=done?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:${color}">✓</div>`:'';
-        return`<div class="streak-circle ${done?'done':''} ${isToday?'today-circ':''} ${isFuture?'future-circ':''}"
-          style="background:${bg};${done?`border-color:${color}40`:''}" 
-          onclick="${isFuture?'':'toggleHabit(''+hid+'')'}" title="${k}">
-          <div class="streak-circ-day">${dayLabel}</div>
-          <div class="streak-circ-num" style="color:${done?color:'var(--muted)'}">${dayNum}</div>
-          ${checkmark}
-        </div>`;
-      }).join('')}
-    </div>
-    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted);padding:0 2px">
-      <span>${days[0].toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</span>
-      <span>last 28 days</span>
-      <span>today</span>
-    </div>
-  </div>`;
+  const circles=days.map(d=>{
+    const k=dateKey(d);
+    const done=!!(state.habitLog[k]&&state.habitLog[k][hid]);
+    const isToday=k===todayStr;
+    const isFuture=k>todayStr;
+    const dayNum=d.getDate();
+    const dayLabel=dayLabels[d.getDay()===0?6:d.getDay()-1];
+    const bg=done?color+'33':'var(--surface3)';
+    const borderStyle=done?'border-color:'+color+'40':'';
+    const cls=['streak-circle',done?'done':'',isToday?'today-circ':'',isFuture?'future-circ':''].filter(Boolean).join(' ');
+    const onclick=isFuture?'':'toggleHabit(\''+hid+'\')';
+    const checkHTML=done?'<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:'+color+'">✓</span>':'';
+    const numColor=done?color:'var(--muted)';
+    return '<div class="'+cls+'" style="background:'+bg+';'+borderStyle+'" onclick="'+onclick+'" title="'+k+'">'+
+      '<div class="streak-circ-day">'+dayLabel+'</div>'+
+      '<div class="streak-circ-num" style="color:'+numColor+'">'+dayNum+'</div>'+
+      checkHTML+'</div>';
+  }).join('');
+  const firstDate=days[0].toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  return '<div><div style="display:flex;gap:4px;margin-bottom:6px;overflow-x:auto;padding-bottom:2px">'+circles+'</div>'+
+    '<div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted);padding:0 2px">'+
+    '<span>'+firstDate+'</span><span>last 28 days</span><span>today</span></div></div>';
 }
 
 function renderHabits(){
