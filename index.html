@@ -672,8 +672,7 @@ function setSyncStatus(s,msg){document.getElementById('sync-dot').className='syn
 async function loadFromCloud(){
   setSyncStatus('syncing','Loading...');
   try{
-    const keys=['buckets','logs','cheatsheets','portfolio','checkpoints','habitLog','courseStatus','meta'];
-    const{data,error}=await sb.from('tracker_data').select('data_key,data_value').eq('user_id',USER_ID).in('data_key',keys);
+    const{data,error}=await sb.from('tracker_data').select('data_key,data_value').eq('user_id',USER_ID);
     if(error)throw error;
     if(data&&data.length){
       data.forEach(row=>{
@@ -684,8 +683,9 @@ async function loadFromCloud(){
         }else if(row.data_key==='meta'){
           state.lastLogDate=row.data_value.lastLogDate;state.streak=row.data_value.streak||0;
         }else{
-          const v=row.data_value;
-          state[row.data_key]=v||(Array.isArray(v)?[]:{});
+          if(row.data_value!==null&&row.data_value!==undefined){
+            state[row.data_key]=row.data_value;
+          }
         }
       });
       ['logs','cheatsheets','portfolio','checkpoints'].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[];});
