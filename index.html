@@ -108,17 +108,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .conf-medium{background:rgba(79,156,249,0.15);color:var(--accent)}
 .conf-high{background:rgba(52,211,153,0.15);color:var(--success)}
 /* HABIT HEATMAP */
-.habit-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:16px}
-.habit-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.habit-icon{font-size:22px}
+.habit-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rl);padding:24px;margin-bottom:16px}
+.habit-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.habit-icon{font-size:24px}
 .habit-name{font-size:15px;font-weight:600;flex:1}
-.habit-stats{display:flex;gap:16px}
+.habit-stats{display:flex;gap:20px}
 .habit-stat{text-align:center}
-.habit-stat-val{font-family:var(--mono);font-size:18px;font-weight:700}
-.habit-stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.today-check{width:36px;height:36px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:16px;flex-shrink:0}
-.today-check:hover{transform:scale(1.08)}
-.today-check.done{background:var(--success);border-color:var(--success);color:#fff}
+.habit-stat-val{font-family:var(--mono);font-size:20px;font-weight:700}
+.habit-stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.today-check{width:40px;height:40px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:18px;flex-shrink:0}
+.today-check:hover{transform:scale(1.1);border-color:var(--success)}
+.today-check.done{background:var(--success);border-color:var(--success);color:#fff;box-shadow:0 0 16px rgba(52,211,153,0.35)}
+/* STREAKS-STYLE CIRCLES */
+.streaks-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.streak-circle{width:38px;height:38px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--border);transition:all 0.2s;cursor:pointer;position:relative}
+.streak-circle:hover{transform:scale(1.08)}
+.streak-circle.done{border-color:transparent;box-shadow:0 0 0 2px rgba(52,211,153,0.5)}
+.streak-circle.today-circ{border-color:var(--accent);box-shadow:0 0 0 2px rgba(79,156,249,0.3)}
+.streak-circle.future-circ{opacity:0.2;cursor:default}
+.streak-circle.today-circ.done{border-color:transparent;box-shadow:0 0 0 3px var(--success)}
+.streak-circ-day{font-family:var(--mono);font-size:8px;color:var(--muted);line-height:1;margin-bottom:1px}
+.streak-circ-num{font-family:var(--mono);font-size:11px;font-weight:600;line-height:1}
+/* MONTH CAL */
 .heatmap-wrap{overflow-x:auto;padding-bottom:4px}
 .heatmap{display:flex;gap:3px}
 .heatmap-col{display:flex;flex-direction:column;gap:3px}
@@ -129,18 +140,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .miss-alert{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r);font-size:12px;margin-bottom:10px}
 .miss-alert.warn{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:var(--accent3)}
 .miss-alert.crit{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:var(--danger)}
-/* MONTH CALENDAR */
-.month-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.month-cal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+/* MONTH CALENDAR — Streaks style */
+.month-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.month-cal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px}
 .cal-day-label{font-size:10px;color:var(--muted);text-align:center;font-family:var(--mono);padding:2px 0}
-.cal-day{aspect-ratio:1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:all 0.15s;position:relative;gap:2px}
-.cal-day:hover{border-color:var(--border2)}
+.cal-day{aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);background:var(--surface2);cursor:pointer;transition:all 0.2s;position:relative;border:2px solid transparent}
+.cal-day:hover{transform:scale(1.08)}
 .cal-day.today{border-color:var(--accent);color:var(--accent);font-weight:700}
 .cal-day.empty{background:transparent;border-color:transparent;cursor:default}
-.cal-day.future{opacity:0.3;cursor:default}
-.cal-day-num{font-size:11px;font-weight:500}
-.cal-dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;max-width:28px}
-.cal-dot{width:5px;height:5px;border-radius:50%}
+.cal-day.future{opacity:0.25;cursor:default}
+.cal-day.all-done{background:rgba(52,211,153,0.15);border-color:rgba(52,211,153,0.4)}
+.cal-day.partial{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3)}
+.cal-day-num{font-size:11px;font-weight:600;line-height:1}
+.cal-day-dots{display:flex;gap:2px;margin-top:3px;justify-content:center}
+.cal-dot{width:4px;height:4px;border-radius:50%}
 /* ROADMAP */
 .roadmap-path-tabs{display:flex;gap:8px;margin-bottom:20px}
 .path-tab{padding:8px 20px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;border:1px solid var(--border);color:var(--muted);transition:all 0.15s;user-select:none}
@@ -672,32 +685,36 @@ function setSyncStatus(s,msg){document.getElementById('sync-dot').className='syn
 async function loadFromCloud(){
   setSyncStatus('syncing','Loading...');
   try{
-    const{data,error}=await sb.from('tracker_data').select('data_key,data_value').eq('user_id',USER_ID);
+    const{data,error}=await sb.from('tracker_data').select('*').eq('user_id',USER_ID);
     if(error)throw error;
+    console.log('Supabase rows:',data);
     if(data&&data.length){
       data.forEach(row=>{
-        if(row.data_key==='buckets'){
-          const sv=row.data_value;
-          if(sv.week!==getWeekKey()){state.buckets={core:0,build:0,retain:0,job:0};state.week=getWeekKey();}
-          else{state.buckets=sv.buckets||state.buckets;state.week=sv.week;}
-        }else if(row.data_key==='meta'){
-          state.lastLogDate=row.data_value.lastLogDate;state.streak=row.data_value.streak||0;
-        }else{
-          if(row.data_value!==null&&row.data_value!==undefined){
-            state[row.data_key]=row.data_value;
+        const key=row.data_key,val=row.data_value;
+        console.log('key:',key,'val:',JSON.stringify(val).slice(0,80));
+        if(key==='buckets'){
+          if(val&&val.week){
+            if(val.week!==getWeekKey()){state.buckets={core:0,build:0,retain:0,job:0};state.week=getWeekKey();}
+            else{state.buckets=val.buckets||state.buckets;state.week=val.week;}
           }
+        }else if(key==='meta'){
+          if(val){state.lastLogDate=val.lastLogDate;state.streak=val.streak||0;}
+        }else if(['logs','cheatsheets','portfolio','checkpoints'].includes(key)){
+          state[key]=Array.isArray(val)?val:[];
+          console.log(key,'count:',state[key].length);
+        }else if(key==='habitLog'||key==='courseStatus'){
+          state[key]=(val&&typeof val==='object'&&!Array.isArray(val))?val:{};
         }
       });
-      ['logs','cheatsheets','portfolio','checkpoints'].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[];});
-      if(typeof state.habitLog!=='object'||Array.isArray(state.habitLog))state.habitLog={};
-      if(typeof state.courseStatus!=='object'||Array.isArray(state.courseStatus))state.courseStatus={};
     }
-    // Apply pre-completed
+    ['logs','cheatsheets','portfolio','checkpoints'].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[];});
+    if(typeof state.habitLog!=='object'||Array.isArray(state.habitLog))state.habitLog={};
+    if(typeof state.courseStatus!=='object'||Array.isArray(state.courseStatus))state.courseStatus={};
     PRE_COMPLETED.forEach(id=>{if(!state.courseStatus[id])state.courseStatus[id]='done';});
     PRE_INPROGRESS.forEach(id=>{if(!state.courseStatus[id])state.courseStatus[id]='inprogress';});
     setSyncStatus('synced','Synced · '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
     renderAll();
-  }catch(e){setSyncStatus('error','Offline');loadLocal();}
+  }catch(e){console.error('Load error:',e);setSyncStatus('error','Offline');loadLocal();}
 }
 
 function loadLocal(){
@@ -925,10 +942,13 @@ function renderMonthCalendar(){
     const isFuture=k>today;
     const isToday=k===today;
     const dayHabits=state.habitLog[k]||{};
+    const doneCount=DEFAULT_HABITS.filter(h=>dayHabits[h.id]).length;
+    const allDone=doneCount===DEFAULT_HABITS.length;
+    const partial=doneCount>0&&!allDone;
     const dots=DEFAULT_HABITS.filter(h=>dayHabits[h.id]).map(h=>`<div class="cal-dot" style="background:${habitColors[h.id]}"></div>`).join('');
-    cells+=`<div class="cal-day ${isToday?'today':''} ${isFuture?'future':''}" onclick="${isFuture?'':''}" title="${k}">
+    cells+=`<div class="cal-day ${isToday?'today':''} ${isFuture?'future':''} ${!isFuture&&allDone?'all-done':!isFuture&&partial?'partial':''}" title="${k} — ${doneCount}/${DEFAULT_HABITS.length} habits">
       <div class="cal-day-num">${d}</div>
-      ${dots?`<div class="cal-dots">${dots}</div>`:''}
+      ${dots&&!isFuture?`<div class="cal-day-dots">${dots}</div>`:''}
     </div>`;
   }
   document.getElementById('dash-month-cal').innerHTML=cells;
@@ -970,35 +990,53 @@ function getMonthRate(hid){
   return Math.round((done/today)*100);
 }
 
-function buildHeatmap(hid){
+function buildStreaksRow(hid,color){
+  // Show last 28 days as circles (4 weeks)
   const today=new Date();today.setHours(0,0,0,0);
   const todayStr=dateKey(today);
-  const start=new Date(today);
-  const dow=start.getDay();
-  start.setDate(start.getDate()-(dow===0?6:dow-1));
-  start.setDate(start.getDate()-15*7);
-  const cols=[];let col=[],cur=new Date(start);
-  while(cur<=today){
-    const k=dateKey(cur);
-    col.push({k,done:state.habitLog[k]&&state.habitLog[k][hid],isToday:k===todayStr});
-    if(cur.getDay()===0){cols.push(col);col=[];}
-    cur.setDate(cur.getDate()+1);
+  const days=[];
+  for(let i=27;i>=0;i--){
+    const d=new Date(today);d.setDate(today.getDate()-i);
+    days.push(d);
   }
-  if(col.length)cols.push(col);
-  const monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  let lastMonth=-1;
-  const labels=cols.map(col=>{const fd=col[0]?new Date(col[0].k):null;if(fd&&fd.getMonth()!==lastMonth){lastMonth=fd.getMonth();return monthNames[lastMonth];}return'';});
-  return`<div class="heatmap-wrap">
-    <div style="display:flex;gap:3px;margin-bottom:4px">${labels.map(l=>`<div style="width:13px;font-size:9px;color:var(--muted);font-family:var(--mono);flex-shrink:0">${l}</div>`).join('')}</div>
-    <div class="heatmap">${cols.map(col=>`<div class="heatmap-col">${col.map(c=>`<div class="heatmap-cell${c.done?' done':''}${c.isToday?' today':''}" title="${c.k}"></div>`).join('')}</div>`).join('')}</div>
+  const dayLabels=['M','T','W','T','F','S','S'];
+  return`<div>
+    <div style="display:flex;gap:4px;margin-bottom:6px;overflow-x:auto;padding-bottom:2px">
+      ${days.map(d=>{
+        const k=dateKey(d);
+        const done=state.habitLog[k]&&state.habitLog[k][hid];
+        const isToday=k===todayStr;
+        const isFuture=k>todayStr;
+        const dayNum=d.getDate();
+        const dayLabel=dayLabels[d.getDay()===0?6:d.getDay()-1];
+        const bg=done?color+'33':'var(--surface3)';
+        const checkmark=done?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:${color}">✓</div>`:'';
+        return`<div class="streak-circle ${done?'done':''} ${isToday?'today-circ':''} ${isFuture?'future-circ':''}"
+          style="background:${bg};${done?`border-color:${color}40`:''}" 
+          onclick="${isFuture?'':'toggleHabit(''+hid+'')'}" title="${k}">
+          <div class="streak-circ-day">${dayLabel}</div>
+          <div class="streak-circ-num" style="color:${done?color:'var(--muted)'}">${dayNum}</div>
+          ${checkmark}
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted);padding:0 2px">
+      <span>${days[0].toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</span>
+      <span>last 28 days</span>
+      <span>today</span>
+    </div>
   </div>`;
 }
 
 function renderHabits(){
   const today=todayKey();
-  document.getElementById('today-date-label').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+  const now=new Date();
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('today-date-label').textContent=`${dayNames[now.getDay()]}, ${now.getDate()} ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
   const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
   const yk=dateKey(yesterday);
+  const habitColors={read:'#4f9cf9',study:'#38d9a9',walk:'#f59e0b',jobhunt:'#f472b6'};
   let alerts='';
   DEFAULT_HABITS.forEach(h=>{
     const td=state.habitLog[today]&&state.habitLog[today][h.id];
@@ -1012,18 +1050,23 @@ function renderHabits(){
   document.getElementById('miss-alerts').innerHTML=alerts;
   document.getElementById('habit-grid').innerHTML=DEFAULT_HABITS.map(h=>{
     const done=state.habitLog[today]&&state.habitLog[today][h.id];
+    const color=habitColors[h.id]||'var(--success)';
+    const streak=getHabitStreak(h.id);
     return`<div class="habit-card">
       <div class="habit-header">
-        <span class="habit-icon">${h.icon}</span>
-        <span class="habit-name">${h.name}</span>
-        <div class="habit-stats">
-          <div class="habit-stat"><div class="habit-stat-val" style="color:var(--accent3)">${getHabitStreak(h.id)}</div><div class="habit-stat-label">Streak</div></div>
-          <div class="habit-stat"><div class="habit-stat-val" style="color:var(--muted)">${getHabitLongest(h.id)}</div><div class="habit-stat-label">Best</div></div>
-          <div class="habit-stat"><div class="habit-stat-val" style="color:var(--accent2)">${getMonthRate(h.id)}%</div><div class="habit-stat-label">This month</div></div>
+        <div style="width:44px;height:44px;border-radius:50%;background:${color}22;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid ${color}44">${h.icon}</div>
+        <div style="flex:1">
+          <div class="habit-name">${h.name}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:1px">${streak>0?`🔥 ${streak} day streak`:'No streak yet — start today'}</div>
         </div>
-        <div class="today-check ${done?'done':''}" onclick="toggleHabit('${h.id}')">${done?'✓':''}</div>
+        <div class="habit-stats">
+          <div class="habit-stat"><div class="habit-stat-val" style="color:${color}">${streak}</div><div class="habit-stat-label">Streak</div></div>
+          <div class="habit-stat"><div class="habit-stat-val" style="color:var(--muted)">${getHabitLongest(h.id)}</div><div class="habit-stat-label">Best</div></div>
+          <div class="habit-stat"><div class="habit-stat-val" style="color:var(--accent2)">${getMonthRate(h.id)}%</div><div class="habit-stat-label">Month</div></div>
+        </div>
+        <div class="today-check ${done?'done':''}" onclick="toggleHabit('${h.id}')" title="${done?'Done — tap to undo':'Mark done today'}" style="${done?`box-shadow:0 0 16px ${color}44`:''}">${done?'✓':''}</div>
       </div>
-      ${buildHeatmap(h.id)}
+      ${buildStreaksRow(h.id,color)}
     </div>`;
   }).join('');
 }
